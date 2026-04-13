@@ -422,7 +422,7 @@ const DONATION = {
 // Get a free token at mapbox.com/account/access-tokens
 // Free tier: 50,000 map loads/month — way more than you need.
 // ─────────────────────────────────────────────
-const MAPBOX_TOKEN = "YOUR_MAPBOX_TOKEN_HERE"; // ← PASTE YOUR TOKEN HERE
+const MAPBOX_TOKEN = "pk.eyJ1IjoibWFwbW9zYWljIiwiYSI6ImNtbDc3ZG5xbjBsMDkzZW9hNDh2NmJjaXgifQ.8l_pGlje_2Nru52w6JCYFg"; // ← PASTE YOUR TOKEN HERE
 
 // ─────────────────────────────────────────────
 // 📸 GOOGLE PHOTOS (Shared album for the gallery)
