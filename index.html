@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peak to Pacific — Map</title>
+  <meta name="description" content="Follow Chandler & Teigan's post-graduation road trip from Boulder to the Pacific and back." />
+
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    #map {
+      height: calc(100vh - var(--nav-height) - 260px);
+      min-height: 380px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* ── Location banner ───────────────────────────────── */
+    .location-banner {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .location-pin {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+      box-shadow: 0 0 0 4px var(--gold-glow);
+    }
+
+    .location-info { flex: 1; min-width: 160px; }
+
+    .location-label {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      line-height: 1.15;
+    }
+
+    .location-note {
+      color: var(--text-secondary);
+      font-size: 0.83rem;
+      margin-top: 2px;
+    }
+
+    .live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.22);
+      border-radius: 999px;
+      padding: 5px 13px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green-bright);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* ── Map ───────────────────────────────────────────── */
+    .map-wrapper { position: relative; }
+
+    .map-controls {
+      position: absolute;
+      bottom: 18px; left: 18px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+
+    .map-ctrl-btn {
+      background: rgba(13, 18, 25, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 4px;
+      padding: 7px 13px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      font-family: var(--font-body);
+      transition: all .2s;
+    }
+
+    .map-ctrl-btn:hover {
+      background: rgba(13, 18, 25, 0.98);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .style-toggle {
+      position: absolute;
+      top: 12px; left: 12px;
+      z-index: 10;
+      display: flex;
+      gap: 6px;
+    }
+
+    .style-btn {
+      background: rgba(13, 18, 25, 0.85);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.66rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-family: var(--font-body);
+      transition: all .2s;
+    }
+
+    .style-btn.active,
+    .style-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(13, 18, 25, 0.98);
+    }
+
+    /* ── Car Marker ────────────────────────────────────── */
+    .car-marker {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      background: var(--dark);
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(61,154,200,0.5);
+      animation: car-pulse 2.2s ease-out infinite;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    @keyframes car-pulse {
+      0%   { box-shadow: 0 0 0 0   rgba(61,154,200,0.55); }
+      60%  { box-shadow: 0 0 0 10px rgba(61,154,200,0.0); }
+      100% { box-shadow: 0 0 0 0   rgba(61,154,200,0.0); }
+    }
+
+    /* ── Legend ────────────────────────────────────────── */
+    .route-legend {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding: 0 4px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+    }
+
+    .legend-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Progress strip ────────────────────────────────── */
+    .progress-section {
+      margin-top: 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 18px 22px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    .progress-meta .label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .progress-meta .value {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--gold);
+    }
+
+    /* ── Popup ─────────────────────────────────────────── */
+    .popup-emoji { font-size: 1.3rem; margin-bottom: 5px; }
+    .popup-name {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+    .popup-sub  { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 8px; }
+    .popup-highlight { font-size: 0.68rem; color: var(--text-secondary); margin-top: 2px; }
+    .popup-highlight::before { content: '· '; }
+    .popup-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .popup-dates { font-size: 0.65rem; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: .07em; }
+    .popup-status {
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; padding: 2px 8px; border-radius: 4px;
+    }
+    .popup-status.completed { background: rgba(34,197,94,0.15);  color: #16a34a; }
+    .popup-status.current   { background: rgba(61,154,200,0.15); color: var(--gold); }
+    .popup-status.upcoming  { background: rgba(138,150,168,0.15); color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────── -->
+<nav class="nav" id="mainNav">
+  <a href="index.html" class="nav-brand">
+    Peak <span class="accent">&nbsp;/&nbsp;</span> Pacific
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" class="active">Map</a></li>
+    <li><a href="agenda.html">Agenda</a></li>
+    <li><a href="stats.html">Stats</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="donate.html">Support</a></li>
+  </ul>
+  <button class="nav-mobile-btn" id="mobileBtn" aria-label="Menu">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────────── -->
+<div class="page-hero hero-short" style="background-image: url('images/heroes/map.jpg')">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Live Location</div>
+      <h1 class="hero-title">Follow Our Journey</h1>
+      <p class="hero-subtitle">22 stops · 8 states · ~4,200 miles — Rockies to Pacific and back</p>
+      <div class="hero-badges">
+        <span class="hero-badge hero-badge-live"><span class="dot-live"></span> Tracking Active</span>
+        <span class="hero-badge hero-badge-date">May 12, 2026</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Mountain Divider ────────────────────────────────── -->
+<svg class="mountain-divider" viewBox="0 0 1440 72" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,72 L0,52 L60,38 L120,50 L200,28 L280,44 L360,18 L440,36 L520,12 L600,30 L680,8 L760,26 L840,14 L920,34 L1000,20 L1080,42 L1160,24 L1240,46 L1320,30 L1380,48 L1440,36 L1440,72 Z" fill="#071209"/>
+</svg>
+
+<!-- ── Map Content ────────────────────────────────────── -->
+<main class="page-content" style="padding-top: 8px;">
+  <div class="container" style="padding-bottom: 56px;">
+
+    <div class="location-banner">
+      <div class="location-pin">📍</div>
+      <div class="location-info">
+        <div class="location-label" id="locationLabel">–</div>
+        <div class="location-note" id="locationNote"></div>
+      </div>
+      <div class="live-pill"><span class="dot-live"></span> Live</div>
+    </div>
+
+    <div class="map-wrapper">
+      <div id="map"></div>
+      <div class="style-toggle">
+        <button class="style-btn active" id="btnOutdoors" onclick="setStyle('outdoors')">Outdoors</button>
+        <button class="style-btn" id="btnSatellite" onclick="setStyle('satellite')">Satellite</button>
+        <button class="style-btn" id="btnDark" onclick="setStyle('dark')">Dark</button>
+      </div>
+      <div class="map-controls">
+        <button class="map-ctrl-btn" onclick="fitRoute()">Full Route</button>
+        <button class="map-ctrl-btn" onclick="goToCurrent()">Current</button>
+      </div>
+    </div>
+
+    <div class="route-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#4ade80"></div> Completed</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gold);box-shadow:0 0 6px var(--gold)"></div> Current Stop</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--text-muted)"></div> Upcoming</div>
+      <div class="legend-item"><div style="width:22px;height:2px;background:rgba(255,255,255,0.75);border-radius:1px;border-top:1px dashed rgba(61,154,200,0.8)"></div> Route</div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-meta">
+        <span class="label">Trip Progress</span>
+        <span class="value" id="progressLabel">–</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <svg class="footer-mountain" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,40 L0,28 L80,18 L160,28 L240,12 L320,24 L400,8 L480,20 L560,6 L640,18 L720,4 L800,16 L880,6 L960,20 L1040,10 L1120,22 L1200,12 L1280,24 L1360,14 L1440,24 L1440,40 Z" fill="var(--sage)"/>
+  </svg>
+  <div class="footer-brand">Peak to Pacific</div>
+  <div>Chandler &amp; Teigan · CU Boulder Class of '26 · 🤘</div>
+</footer>
+
+<script src="config.js"></script>
+<script src="nav-scroll.js" defer></script>
+<script>
+  document.getElementById('mobileBtn').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  document.getElementById('locationLabel').textContent = CURRENT_LOCATION.label;
+  document.getElementById('locationNote').textContent  = CURRENT_LOCATION.note || '';
+
+  const completedCount = STOPS.filter(s => s.status === 'completed').length;
+  const pct = Math.round((completedCount / STOPS.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent =
+    `${completedCount} of ${STOPS.length} stops · ${pct}%`;
+
+  mapboxgl.accessToken = typeof MAPBOX_TOKEN !== 'undefined' ? MAPBOX_TOKEN : 'YOUR_MAPBOX_TOKEN_HERE';
+
+  const STYLES = {
+    outdoors:  'mapbox://styles/mapbox/outdoors-v12',
+    satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
+    dark:      'mapbox://styles/mapbox/dark-v11',
+  };
+
+  let currentStyle = 'outdoors';
+  let carMarker = null;
+
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: STYLES.outdoors,
+    center: [-110, 42],
+    zoom: 4.5,
+    projection: 'globe',
+  });
+
+  map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+  function setStyle(name) {
+    if (currentStyle === name) return;
+    currentStyle = name;
+    map.setStyle(STYLES[name]);
+    document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
+    map.once('styledata', addLayers);
+  }
+
+  map.on('load', () => {
+    map.setFog({ color: 'rgb(13, 18, 25)', 'high-color': 'rgb(20, 32, 52)', 'horizon-blend': 0.04 });
+    addLayers();
+  });
+
+  function addLayers() {
+    ['route-line-glow','route-line','route-points','current-point'].forEach(id => {
+      if (map.getLayer(id)) map.removeLayer(id);
+      if (map.getSource(id)) map.removeSource(id);
+    });
+
+    const coords = STOPS.map(s => [s.lng, s.lat]);
+
+    map.addSource('route-line', {
+      type: 'geojson',
+      data: { type:'Feature', geometry:{ type:'LineString', coordinates:coords } },
+    });
+
+    // Glow layer — soft white halo underneath the dashed line
+    map.addLayer({
+      id: 'route-line-glow', type: 'line', source: 'route-line',
+      layout: { 'line-join':'round', 'line-cap':'round' },
+      paint: { 'line-color':'#ffffff', 'line-width':5, 'line-opacity':0.12 },
+    });
+
+    // Main dashed route line — white with blue tint, visible on all map styles
+    map.addLayer({
+      id: 'route-line', type: 'line', source: 'route-line',
+      layout: { 'line-join':'round', 'line-cap':'round' },
+      paint: { 'line-color':'#a8d4ef', 'line-width':2, 'line-opacity':0.85, 'line-dasharray':[2,3] },
+    });
+
+    const features = STOPS.map(s => ({
+      type: 'Feature',
+      properties: { id:s.id, name:s.name, subtitle:s.subtitle, status:s.status, emoji:s.emoji, dates:s.dates, highlights:(s.highlights||[]).slice(0,3).join('||') },
+      geometry: { type:'Point', coordinates:[s.lng,s.lat] },
+    }));
+
+    map.addSource('route-points', { type:'geojson', data:{ type:'FeatureCollection', features } });
+
+    map.addLayer({
+      id:'route-points', type:'circle', source:'route-points',
+      paint: {
+        'circle-radius': ['case',['==',['get','status'],'current'],11,['==',['get','status'],'completed'],7,5],
+        'circle-color':  ['case',['==',['get','status'],'current'],'#3d9ac8',['==',['get','status'],'completed'],'#22c55e','#8896a8'],
+        'circle-stroke-width': ['case',['==',['get','status'],'current'],3,2],
+        'circle-stroke-color': ['case',['==',['get','status'],'current'],'rgba(61,154,200,0.45)',['==',['get','status'],'completed'],'rgba(34,197,94,0.3)','rgba(138,150,168,0.3)'],
+        'circle-opacity': ['case',['==',['get','status'],'upcoming'],0.65,1],
+      },
+    });
+
+    const currentStop = STOPS.find(s => s.status === 'current');
+
+    // Car HTML marker — created once, persists across style changes
+    if (currentStop && !carMarker) {
+      const el = document.createElement('div');
+      el.className = 'car-marker';
+      el.textContent = '🚗';
+      el.title = currentStop.name;
+      carMarker = new mapboxgl.Marker({ element: el, anchor: 'center' })
+        .setLngLat([currentStop.lng, currentStop.lat])
+        .addTo(map);
+    }
+
+    map.on('click', 'route-points', (e) => {
+      const p = e.features[0].properties;
+      const highlights = (p.highlights||'').split('||').filter(Boolean);
+      new mapboxgl.Popup({ closeButton:true, maxWidth:'260px' })
+        .setLngLat(e.features[0].geometry.coordinates)
+        .setHTML(`
+          <div class="popup-emoji">${p.emoji}</div>
+          <div class="popup-name">${p.name}</div>
+          <div class="popup-sub">${p.subtitle}</div>
+          ${highlights.map(h=>`<div class="popup-highlight">${h}</div>`).join('')}
+          <div class="popup-footer">
+            <span class="popup-dates">${p.dates}</span>
+            <span class="popup-status ${p.status}">${p.status}</span>
+          </div>`)
+        .addTo(map);
+    });
+
+    map.on('mouseenter','route-points',()=>{ map.getCanvas().style.cursor='pointer'; });
+    map.on('mouseleave','route-points',()=>{ map.getCanvas().style.cursor=''; });
+
+    if (currentStop) {
+      setTimeout(()=>{
+        new mapboxgl.Popup({ closeButton:true, maxWidth:'260px' })
+          .setLngLat([currentStop.lng,currentStop.lat])
+          .setHTML(`<div class="popup-emoji">${currentStop.emoji}</div><div class="popup-name">${currentStop.name}</div><div class="popup-sub">${currentStop.subtitle}</div><div class="popup-footer"><span class="popup-dates">${currentStop.dates}</span><span class="popup-status current">current</span></div>`)
+          .addTo(map);
+      }, 800);
+    }
+  }
+
+  function fitRoute() {
+    const coords = STOPS.map(s=>[s.lng,s.lat]);
+    const bounds = coords.reduce((b,c)=>b.extend(c), new mapboxgl.LngLatBounds(coords[0],coords[0]));
+    map.fitBounds(bounds, { padding:60, duration:1000 });
+  }
+
+  function goToCurrent() {
+    map.flyTo({ center:[CURRENT_LOCATION.lng,CURRENT_LOCATION.lat], zoom:10, duration:1200 });
+  }
+</script>
+</body>
+</html>
