@@ -364,9 +364,8 @@
 
   // ── States ────────────────────────────────────────────────
   const allStates = [
-    {abbr:'CO',name:'Colorado'}, {abbr:'WY',name:'Wyoming'}, {abbr:'MT',name:'Montana'},
-    {abbr:'WA',name:'Washington'}, {abbr:'OR',name:'Oregon'}, {abbr:'CA',name:'California'},
-    {abbr:'NV',name:'Nevada'}, {abbr:'UT',name:'Utah'},
+    {abbr:'CO',name:'Colorado'}, {abbr:'WY',name:'Wyoming'}, {abbr:'UT',name:'Utah'},
+    {abbr:'NV',name:'Nevada'}, {abbr:'CA',name:'California'},
   ];
   const visited = new Set(STATS.statesVisited || []);
   document.getElementById('statesList').innerHTML = allStates.map(s => `
@@ -378,13 +377,14 @@
   // ── Highlights ────────────────────────────────────────────
   const highlightItems = [
     {icon:'🎓', text:'Graduated from University of Colorado Boulder', loc:'Boulder, CO'},
-    {icon:'🏔️', text:'Delta Lake via Lupine Meadows — 7.6 mi, 2,300 ft gain', loc:'Grand Teton NP'},
-    {icon:'🌋', text:'Old Faithful, Grand Prismatic, Canyon of Yellowstone', loc:'Yellowstone NP'},
-    {icon:'🏔️', text:'Going-to-the-Sun Road + Avalanche Lake hike', loc:'Glacier NP'},
-    {icon:'🌲', text:'Skyline Trail on the slopes of Mount Rainier', loc:'Mt. Rainier NP'},
-    {icon:'🌊', text:'Hoh Rainforest + Rialto Beach Hole-in-the-Wall', loc:'Olympic NP'},
-    {icon:'🌉', text:'Pacific Coast Highway — Bixby Bridge to Big Sur', loc:'California Coast'},
-    {icon:'🏜️', text:'Angels Landing, The Narrows, Delicate Arch', loc:'Zion & Arches'},
+    {icon:'🏔️', text:'Schwabacher Landing, Jenny Lake & Snake River Overlook', loc:'Grand Teton NP'},
+    {icon:'🏙️', text:'Rest day — real bed, laundry, restock', loc:'Salt Lake City, UT'},
+    {icon:'🏜️', text:'Riverside Walk, Emerald Pools & Scout Lookout', loc:'Zion NP'},
+    {icon:'🏞️', text:'Half Dome or Mist Trail — Vernal & Nevada Falls', loc:'Yosemite NP'},
+    {icon:'🌉', text:'Golden Gate Bridge & Lands End', loc:'San Francisco, CA'},
+    {icon:'🌊', text:'Cannery Row, Carmel Beach & 17-Mile Drive', loc:'Monterey, CA'},
+    {icon:'🎬', text:'Griffith Observatory, Santa Monica & Malibu', loc:'Los Angeles, CA'},
+    {icon:'🌅', text:'Balanced Rock, Windows Section & Delicate Arch', loc:'Moab / Arches NP'},
   ];
   document.getElementById('highlightsList').innerHTML = highlightItems.map(h => `
     <div class="highlight-row">
