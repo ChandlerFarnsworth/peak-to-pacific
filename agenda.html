@@ -269,6 +269,185 @@
       .stop-timeline { width: 38px; }
       .stop-name { font-size: 1rem; }
     }
+
+    /* ── Tab bar ─────────────────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 0;
+      background: var(--bg-card);
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+
+    .tab-btn + .tab-btn { border-left: 1px solid var(--border); }
+
+    .tab-btn.active {
+      background: var(--gold);
+      color: #fff;
+    }
+
+    .tab-btn:not(.active):hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+
+    /* ── Tab panels ──────────────────────────────────────── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Day cards ───────────────────────────────────────── */
+    .day-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+
+    .day-card:hover { border-color: var(--border-light); }
+    .day-card.open { border-color: rgba(61,154,200,0.35); }
+
+    .day-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .day-num {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      width: 36px;
+      flex-shrink: 0;
+    }
+
+    .day-card.open .day-num,
+    .day-card.today .day-num { color: var(--gold); }
+
+    .day-meta { flex: 1; min-width: 0; }
+
+    .day-route {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .day-card.past .day-route { color: var(--text-secondary); }
+    .day-card.today .day-route { color: var(--gold); }
+
+    .day-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .day-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .day-badge {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+
+    .day-badge.today-badge {
+      color: var(--gold);
+      border-color: rgba(61,154,200,0.35);
+      background: rgba(61,154,200,0.07);
+    }
+
+    .day-chevron {
+      flex-shrink: 0;
+      color: var(--text-muted);
+      transition: transform .25s;
+    }
+
+    .day-card.open .day-chevron { transform: rotate(180deg); }
+
+    .day-card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .35s ease;
+    }
+
+    .day-card.open .day-card-body { max-height: 600px; }
+
+    .day-card-inner { padding: 0 20px 18px 70px; }
+
+    .day-plan-list {
+      list-style: none;
+      margin: 0 0 10px;
+      padding: 0;
+    }
+
+    .day-plan-list li {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .day-plan-list li:last-child { border-bottom: none; }
+
+    .day-plan-list li::before {
+      content: '—';
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .day-note {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .day-card-inner { padding-left: 20px; }
+      .day-badge:not(.today-badge) { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -283,7 +462,6 @@
     <li><a href="agenda.html" class="active">Agenda</a></li>
     <li><a href="stats.html">Stats</a></li>
     <li><a href="gallery.html">Gallery</a></li>
-    <li><a href="donate.html">Support</a></li>
   </ul>
   <button class="nav-mobile-btn" id="mobileBtn" aria-label="Menu">
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
@@ -298,7 +476,7 @@
     <div class="hero-content">
       <div class="hero-eyebrow">The Full Journey</div>
       <h1 class="hero-title">Trip Agenda</h1>
-      <p class="hero-subtitle">Boulder → Rockies → Pacific Northwest → Oregon → California → Vegas → Utah → Home</p>
+      <p class="hero-subtitle">Boulder → Tetons → Zion → Yosemite → LA → Arches → Home</p>
     </div>
   </div>
 </div>
@@ -311,11 +489,22 @@
 <main class="page-content">
   <div class="container">
 
-    <!-- Summary Strip -->
-    <div class="agenda-summary" id="agendaSummary"></div>
+    <!-- Tab switcher -->
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="stops">Stops</button>
+      <button class="tab-btn" data-tab="days">Day by Day</button>
+    </div>
 
-    <!-- Itinerary (rendered by JS) -->
-    <div id="itinerary"></div>
+    <!-- STOPS TAB ──────────────────────────────────────── -->
+    <div class="tab-panel active" id="tab-stops">
+      <div class="agenda-summary" id="agendaSummary"></div>
+      <div id="itinerary"></div>
+    </div>
+
+    <!-- DAY BY DAY TAB ─────────────────────────────────── -->
+    <div class="tab-panel" id="tab-days">
+      <div id="dayByDay"></div>
+    </div>
 
   </div>
 </main>
@@ -335,6 +524,16 @@
   // ── Nav mobile ──────────────────────────────────────────
   document.getElementById('mobileBtn').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('open');
+  });
+
+  // ── Tab switching ────────────────────────────────────────
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
   });
 
   // ── Build summary strip ────────────────────────────────
@@ -382,66 +581,55 @@
   const firstUpcomingIdx = STOPS.findIndex(s => s.status !== 'completed');
   const pct = firstUpcomingIdx < 0 ? 100 : Math.round((firstUpcomingIdx / STOPS.length) * 100);
 
-  // ── Render itinerary ───────────────────────────────────
+  // ── Render stops tab ───────────────────────────────────
   const itineraryEl = document.getElementById('itinerary');
   let html = '';
 
   Object.entries(grouped).forEach(([phase, stops]) => {
-    html += `<div class="phase-group">
-      <div class="phase-label">${phase}</div>
-      <div class="stops-list" style="--completed-pct:${pct}%">`;
+    html += '<div class="phase-group"><div class="phase-label">' + phase + '</div>'
+          + '<div class="stops-list" style="--completed-pct:' + pct + '%">';
 
     stops.forEach(stop => {
-      const highlightsHtml = (stop.highlights || []).map(h =>
-        `<span class="highlight-chip">${h}</span>`
-      ).join('');
+      const highlightsHtml = (stop.highlights || [])
+        .map(h => '<span class="highlight-chip">' + h + '</span>').join('');
 
       const nightsHtml = stop.nights > 0
-        ? `<span class="nights-badge">🌙 ${stop.nights} night${stop.nights > 1 ? 's' : ''}</span>`
+        ? '<span class="nights-badge">🌙 ' + stop.nights + ' night' + (stop.nights > 1 ? 's' : '') + '</span>'
         : '';
 
       const youAreHere = stop.status === 'current'
-        ? `<div class="you-are-here">
-             <span class="dot-live"></span>
-             You are here right now
-           </div>`
+        ? '<div class="you-are-here"><span class="dot-live"></span>You are here right now</div>'
         : '';
 
       const checkmark = stop.status === 'completed'
-        ? `<svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-             <path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-           </svg>`
+        ? '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
         : '';
 
-      html += `
-        <div class="stop-item">
-          <div class="stop-timeline">
-            <div class="stop-dot ${stop.status}">${checkmark}</div>
-          </div>
-          <div class="stop-card ${stop.status}">
-            <div class="stop-card-inner">
-              <div class="stop-header">
-                <div class="stop-name-block">
-                  <div class="stop-emoji-name">
-                    <span class="stop-emoji">${stop.emoji}</span>
-                    <span class="stop-name">${stop.name}</span>
-                  </div>
-                  <div class="stop-subtitle">${stop.subtitle}</div>
-                </div>
-                <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0;">
-                  <div class="stop-dates">${stop.dates}</div>
-                  ${nightsHtml}
-                </div>
-              </div>
-              ${highlightsHtml ? `<div class="stop-highlights">${highlightsHtml}</div>` : ''}
-            </div>
-            ${youAreHere}
-          </div>
-        </div>
-      `;
+      html += '<div class="stop-item">'
+        + '<div class="stop-timeline"><div class="stop-dot ' + stop.status + '">' + checkmark + '</div></div>'
+        + '<div class="stop-card ' + stop.status + '">'
+        + '<div class="stop-card-inner">'
+        + '<div class="stop-header">'
+        + '<div class="stop-name-block">'
+        + '<div class="stop-emoji-name">'
+        + '<span class="stop-emoji">' + stop.emoji + '</span>'
+        + '<span class="stop-name">' + stop.name + '</span>'
+        + '</div>'
+        + '<div class="stop-subtitle">' + stop.subtitle + '</div>'
+        + '</div>'
+        + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">'
+        + '<div class="stop-dates">' + stop.dates + '</div>'
+        + nightsHtml
+        + '</div>'
+        + '</div>'
+        + (highlightsHtml ? '<div class="stop-highlights">' + highlightsHtml + '</div>' : '')
+        + '</div>'
+        + youAreHere
+        + '</div>'
+        + '</div>';
     });
 
-    html += `</div></div>`;
+    html += '</div></div>';
   });
 
   itineraryEl.innerHTML = html;
@@ -449,10 +637,61 @@
   // Scroll to current stop
   setTimeout(() => {
     const currentCard = itineraryEl.querySelector('.stop-card.current');
-    if (currentCard) {
-      currentCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    if (currentCard) currentCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 300);
+
+  // ── Render day-by-day accordion ────────────────────────
+  const dayByDayEl = document.getElementById('dayByDay');
+  if (typeof DAYS !== 'undefined' && DAYS.length) {
+    let dayHtml = '';
+    DAYS.forEach(function(day, i) {
+      const isToday = day.status === 'today';
+      const isPast  = day.status === 'past';
+      const cardCls = 'day-card' + (isToday ? ' today' : isPast ? ' past' : '');
+
+      const planItems = (day.plan || [])
+        .map(function(item) { return '<li>' + item + '</li>'; }).join('');
+
+      const driveHtml = day.drive
+        ? '<span class="day-badge">' + day.drive + '</span>' : '';
+
+      const todayBadge = isToday
+        ? '<span class="day-badge today-badge">Today</span>' : '';
+
+      const sleepLine = day.sleep ? ' · Sleep: ' + day.sleep : '';
+
+      dayHtml += '<div class="' + cardCls + '" id="day-' + i + '">'
+        + '<div class="day-card-header" onclick="toggleDay(' + i + ')">'
+        + '<div class="day-num">Day ' + (i + 1) + '</div>'
+        + '<div class="day-meta">'
+        + '<div class="day-route">' + day.route + '</div>'
+        + '<div class="day-subtitle">' + day.date + sleepLine + '</div>'
+        + '</div>'
+        + '<div class="day-badges">' + driveHtml + todayBadge + '</div>'
+        + '<svg class="day-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">'
+        + '<path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
+        + '</svg>'
+        + '</div>'
+        + '<div class="day-card-body"><div class="day-card-inner">'
+        + (planItems ? '<ul class="day-plan-list">' + planItems + '</ul>' : '')
+        + (day.note ? '<div class="day-note">' + day.note + '</div>' : '')
+        + '</div></div>'
+        + '</div>';
+    });
+
+    dayByDayEl.innerHTML = dayHtml;
+
+    // Auto-open today or first upcoming
+    var autoIdx = DAYS.findIndex(function(d) { return d.status === 'today' || d.status === 'upcoming'; });
+    if (autoIdx >= 0) toggleDay(autoIdx);
+  } else {
+    dayByDayEl.innerHTML = '<p style="color:var(--text-muted);padding:20px 0;">Day-by-day details coming soon.</p>';
+  }
+
+  function toggleDay(i) {
+    var card = document.getElementById('day-' + i);
+    if (card) card.classList.toggle('open');
+  }
 </script>
 </body>
 </html>

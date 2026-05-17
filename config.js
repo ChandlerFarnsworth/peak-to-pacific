@@ -315,6 +315,241 @@ const CLOUDINARY = {
 };
 
 // ─────────────────────────────────────────────
+// 📅 DAY-BY-DAY ITINERARY
+// Shown on the Agenda page "Day by Day" tab.
+// Update `status` as you go: "done" | "today" | "upcoming"
+// ─────────────────────────────────────────────
+const DAYS = [
+  {
+    date: "Mon, May 18",
+    route: "Boulder → Grand Teton",
+    drive: "~8–9 hrs",
+    sleep: "Jackson / Teton area",
+    phase: "Phase 1 — Rockies",
+    status: "upcoming",
+    plan: [
+      "Leave Boulder early morning",
+      "Schwabacher Landing (sunset)",
+      "Mormon Row",
+      "Snake River Overlook",
+      "Dinner in Jackson",
+    ],
+    note: "Keep it light — no big hike after this drive.",
+  },
+  {
+    date: "Tue, May 19",
+    route: "Grand Teton — Full Day",
+    drive: null,
+    sleep: "Jackson / Teton area",
+    phase: "Phase 1 — Rockies",
+    status: "upcoming",
+    plan: [
+      "Sunrise at Schwabacher Landing or Jenny Lake",
+      "Jenny Lake — Hidden Falls & Inspiration Point",
+      "Taggart Lake or Bradley Lake hike",
+      "Sunset at Mormon Row or Snake River Overlook",
+    ],
+    note: "Avoid Delta Lake unless trail conditions are confirmed — snow likely in late May.",
+  },
+  {
+    date: "Wed, May 20",
+    route: "Grand Teton → Salt Lake City",
+    drive: "~5–6 hrs",
+    sleep: "Salt Lake City",
+    phase: "Phase 1 — Rockies",
+    status: "upcoming",
+    plan: [
+      "Morning coffee & final Teton viewpoint",
+      "Drive to Salt Lake City",
+      "Restock food and water",
+      "Laundry if needed",
+      "Real bed — reset for Utah",
+    ],
+    note: "Reset day. Take it easy.",
+  },
+  {
+    date: "Thu, May 21",
+    route: "Salt Lake City → Zion",
+    drive: "~4.5–5 hrs",
+    sleep: "Springdale / Hurricane",
+    phase: "Phase 2 — Utah",
+    status: "upcoming",
+    plan: [
+      "Drive to Zion",
+      "Pa'rus Trail (easy, paved)",
+      "Watchman Trail",
+      "Canyon Overlook Trail",
+      "Sunset near Canyon Junction",
+    ],
+  },
+  {
+    date: "Fri, May 22",
+    route: "Zion — Full Day",
+    drive: null,
+    sleep: "Springdale / Hurricane",
+    phase: "Phase 2 — Utah",
+    status: "upcoming",
+    plan: [
+      "Early shuttle into Zion Canyon",
+      "Riverside Walk",
+      "Emerald Pools",
+      "Scout Lookout (Angels Landing requires permit)",
+      "The Narrows (conditions permitting)",
+    ],
+    note: "Angels Landing requires a permit — Scout Lookout is the best no-permit alternative.",
+  },
+  {
+    date: "Sat, May 23",
+    route: "Zion → Central California",
+    drive: "~7–9 hrs",
+    sleep: "Bakersfield / Visalia / Fresno",
+    phase: "Phase 3 — California",
+    status: "upcoming",
+    plan: [
+      "Positioning drive for Yosemite",
+      "Zion → Las Vegas → Bakersfield / Fresno",
+    ],
+    note: "Do not rely on Tioga Pass from the east — Yosemite's Tioga Road may not be open yet.",
+  },
+  {
+    date: "Sun, May 24",
+    route: "Central CA → Yosemite",
+    drive: "~2.5–4.5 hrs",
+    sleep: "Yosemite / El Portal / Mariposa",
+    phase: "Phase 3 — California",
+    status: "upcoming",
+    plan: [
+      "Drive into Yosemite Valley",
+      "Tunnel View",
+      "Bridalveil Fall",
+      "Lower Yosemite Fall",
+      "Cook's Meadow",
+      "Valley View at sunset",
+    ],
+  },
+  {
+    date: "Mon, May 25",
+    route: "Yosemite — Valley Day",
+    drive: null,
+    sleep: "Yosemite / El Portal / Mariposa",
+    phase: "Phase 3 — California",
+    status: "upcoming",
+    plan: [
+      "Yosemite Falls",
+      "Cook's Meadow Loop",
+      "Sentinel Meadow",
+      "Mirror Lake",
+      "El Capitan Meadow",
+      "Tunnel View / Valley View sunset",
+    ],
+    note: "Lower-stress day — just walk around and take it all in.",
+  },
+  {
+    date: "Tue, May 26",
+    route: "Yosemite — Big Hike Day",
+    drive: null,
+    sleep: "Yosemite / El Portal / Mariposa",
+    phase: "Phase 3 — California",
+    status: "upcoming",
+    plan: [
+      "Half Dome (if permit secured — start extremely early)",
+      "OR: Mist Trail → Vernal Fall → Nevada Fall",
+      "OR: Glacier Point (if road is open)",
+    ],
+    note: "Half Dome requires a lottery permit. Mist Trail is the best no-permit alternative.",
+  },
+  {
+    date: "Wed, May 27",
+    route: "Yosemite → SF → Monterey → SLO",
+    drive: "~7–9 hrs total",
+    sleep: "San Luis Obispo / Pismo Beach",
+    phase: "Phase 3 — California",
+    status: "upcoming",
+    plan: [
+      "Leave Yosemite early",
+      "San Francisco — Golden Gate, Lands End, Palace of Fine Arts",
+      "Monterey — Cannery Row, Carmel Beach, 17-Mile Drive",
+      "Continue south to San Luis Obispo / Pismo Beach",
+    ],
+    note: "Sleep in SLO or Pismo Beach — makes May 28 much easier.",
+  },
+  {
+    date: "Thu, May 28",
+    route: "Coast → Los Angeles",
+    drive: "~3.5–4.5 hrs from SLO",
+    sleep: "LA / Burbank",
+    phase: "Phase 3 — California",
+    status: "upcoming",
+    plan: [
+      "Easy morning",
+      "Optional Santa Barbara stop",
+      "Optional Malibu / Santa Monica stop",
+      "Arrive LA by night",
+    ],
+  },
+  {
+    date: "Fri, May 29",
+    route: "Los Angeles — Day 1",
+    drive: null,
+    sleep: "LA / Burbank",
+    phase: "Phase 3 — California",
+    status: "upcoming",
+    plan: [
+      "Griffith Observatory",
+      "Burbank / Studio City",
+      "Santa Monica & Venice Beach",
+      "Family / friend time",
+    ],
+  },
+  {
+    date: "Sat, May 30",
+    route: "Los Angeles — Day 2",
+    drive: null,
+    sleep: "LA / Burbank",
+    phase: "Phase 3 — California",
+    status: "upcoming",
+    plan: [
+      "Malibu or Pasadena",
+      "Fill gas, pack car at night",
+      "Download offline maps",
+      "Confirm Moab lodging",
+      "Sleep early",
+    ],
+    note: "Pack everything the night before — it's a 10+ hour drive tomorrow.",
+  },
+  {
+    date: "Sun, May 31",
+    route: "LA → Moab / Arches",
+    drive: "~10–11 hrs",
+    sleep: "Moab",
+    phase: "Phase 4 — Desert & Home",
+    status: "upcoming",
+    plan: [
+      "Leave LA by 6–7 AM",
+      "Arrive Moab ~5–7 PM",
+      "Park Avenue & Balanced Rock (evening)",
+      "Windows Section & Double Arch",
+      "Delicate Arch Viewpoint at sunset",
+    ],
+    note: "Hardest drive of the trip — leave as early as possible.",
+  },
+  {
+    date: "Mon, June 1",
+    route: "Moab → Boulder 🏠",
+    drive: "~6–6.5 hrs",
+    sleep: "Boulder",
+    phase: "Phase 4 — Desert & Home",
+    status: "upcoming",
+    plan: [
+      "Leave Moab by 6:30 AM",
+      "Grand Junction quick stop (~9:30–10 AM)",
+      "Arrive Boulder ~3 PM 🎉",
+    ],
+    note: "Don't plan Arches in the morning — you need to leave by 6:30 to hit Boulder by 3.",
+  },
+];
+
+// ─────────────────────────────────────────────
 // 📸 GALLERY (fallback if Cloudinary not set up)
 // If you prefer to upload manually, drop files in /photos/
 // and add entries here. Cloudinary takes priority when configured.
@@ -340,5 +575,5 @@ const TRIP_META = {
 
 // ── DO NOT EDIT BELOW THIS LINE ────────────────────────────
 if (typeof module !== "undefined") module.exports = {
-  CURRENT_LOCATION, STOPS, STATS, SPOTIFY_PLAYLIST_URL, DONATION, GALLERY, GOOGLE_PHOTOS_URL, TRIP_META,
+  CURRENT_LOCATION, STOPS, DAYS, STATS, SPOTIFY_PLAYLIST_URL, DONATION, GALLERY, GOOGLE_PHOTOS_URL, TRIP_META,
 };
