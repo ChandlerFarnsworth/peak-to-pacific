@@ -320,6 +320,7 @@ const CLOUDINARY = {
 // Update `status` as you go: "done" | "today" | "upcoming"
 // ─────────────────────────────────────────────
 const DAYS = [
+  // ── DAY 1 ─────────────────────────────────────────────
   {
     date: "Mon, May 18",
     route: "Boulder → Grand Teton",
@@ -328,14 +329,29 @@ const DAYS = [
     phase: "Phase 1 — Rockies",
     status: "upcoming",
     plan: [
-      "Leave Boulder early morning",
-      "Schwabacher Landing (sunset)",
-      "Mormon Row",
-      "Snake River Overlook",
-      "Dinner in Jackson",
+      { section: "🏕️ Stay", items: [
+        "Headwaters Campground at Flagg Ranch — inside park, book at recreation.gov",
+        "OR Gros Ventre Campground near Moose — first-come, great valley views",
+        "OR motel in Jackson (~$120–180/night)",
+      ]},
+      { section: "📍 Evening Stops", items: [
+        "Schwabacher Landing — golden hour reflections of the Tetons",
+        "Mormon Row — Moulton Barn with Teton backdrop",
+        "Snake River Overlook — Ansel Adams' famous vantage point",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Dinner in Jackson: Million Dollar Cowboy Bar or Persephone Bakery",
+      ]},
+      { section: "📋 Logistics", items: [
+        "Leave Boulder by 7 AM to arrive for sunset",
+        "Gas up before leaving — Wyoming gas is pricier",
+        "Download Gaia GPS offline maps before you go",
+      ]},
     ],
-    note: "Keep it light — no big hike after this drive.",
+    note: "Keep it light — no big hike after 8+ hrs of driving.",
   },
+
+  // ── DAY 2 ─────────────────────────────────────────────
   {
     date: "Tue, May 19",
     route: "Grand Teton — Full Day",
@@ -344,13 +360,25 @@ const DAYS = [
     phase: "Phase 1 — Rockies",
     status: "upcoming",
     plan: [
-      "Sunrise at Schwabacher Landing or Jenny Lake",
-      "Jenny Lake — Hidden Falls & Inspiration Point",
-      "Taggart Lake or Bradley Lake hike",
-      "Sunset at Mormon Row or Snake River Overlook",
+      { section: "🌅 Morning", items: [
+        "Sunrise at Schwabacher Landing (~5:30 AM) or String Lake",
+        "Coffee & breakfast at camp or in Jackson",
+      ]},
+      { section: "🥾 Hikes", items: [
+        "Jenny Lake Ferry → Hidden Falls → Inspiration Point (7 mi, moderate) — take the boat one way",
+        "Taggart Lake Loop (3.8 mi, easy) — stunning glacier lake",
+        "Bradley Lake extension adds ~1 mile and is worth it",
+        "Pack a lunch — eat at the Jenny Lake shore",
+      ]},
+      { section: "🌄 Evening", items: [
+        "Sunset at Mormon Row or Snake River Overlook",
+        "Dinner in Jackson: Local Restaurant & Bar or Snake River Grill",
+      ]},
     ],
-    note: "Avoid Delta Lake unless trail conditions are confirmed — snow likely in late May.",
+    note: "Avoid Delta Lake unless confirmed snow-free — typically still buried in late May.",
   },
+
+  // ── DAY 3 ─────────────────────────────────────────────
   {
     date: "Wed, May 20",
     route: "Grand Teton → Salt Lake City",
@@ -359,45 +387,95 @@ const DAYS = [
     phase: "Phase 1 — Rockies",
     status: "upcoming",
     plan: [
-      "Morning coffee & final Teton viewpoint",
-      "Drive to Salt Lake City",
-      "Restock food and water",
-      "Laundry if needed",
-      "Real bed — reset for Utah",
+      { section: "🏨 Stay", items: [
+        "Hotel in SLC — Marriott City Center, Hilton, or Airbnb downtown",
+        "Real bed + real shower before Utah parks",
+      ]},
+      { section: "🌅 Morning", items: [
+        "One last Teton viewpoint with coffee before leaving",
+        "Drive south on US-89 through Star Valley",
+      ]},
+      { section: "🛒 Activities", items: [
+        "Restock food, snacks, and water at Walmart or Smith's",
+        "Laundry if needed — next opportunity is LA",
+        "Check gear: headlamps, water filters, first aid",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Lunch on the road",
+        "Dinner in SLC: Red Iguana (best Mexican in Utah), The Porch, or RoHa Brewing",
+      ]},
     ],
-    note: "Reset day. Take it easy.",
+    note: "Pure reset day — rest up, restock, and prep for the Utah parks push.",
   },
+
+  // ── DAY 4 ─────────────────────────────────────────────
   {
     date: "Thu, May 21",
     route: "Salt Lake City → Zion",
     drive: "~4.5–5 hrs",
-    sleep: "Springdale / Hurricane",
+    sleep: "Springdale / Watchman Campground",
     phase: "Phase 2 — Utah",
     status: "upcoming",
     plan: [
-      "Drive to Zion",
-      "Pa'rus Trail (easy, paved)",
-      "Watchman Trail",
-      "Canyon Overlook Trail",
-      "Sunset near Canyon Junction",
+      { section: "🏕️ Stay", items: [
+        "Watchman Campground — inside the park gates, reservations at recreation.gov",
+        "OR South Campground — more open, first-come",
+        "OR Airbnb/motel in Springdale (quieter, full kitchen)",
+      ]},
+      { section: "🚗 Drive", items: [
+        "SLC → Provo → US-89 S → Hurricane → Springdale",
+        "Stop at a gas station in Hurricane — last cheap gas before the park",
+      ]},
+      { section: "🥾 Afternoon Hikes", items: [
+        "Pa'rus Trail (1.7 mi, paved, easy) — perfect first look at the canyon",
+        "Canyon Overlook Trail (1 mi out-and-back) — sweeping views of lower Zion, minimal effort",
+        "Watchman Trail (3.3 mi, moderate) — best sunset spot, overlooking the campground and valley",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Breakfast in SLC before driving",
+        "Dinner in Springdale: Oscar's Café, Zion Pizza & Noodle, or Whiptail Grill",
+      ]},
+      { section: "📋 Logistics", items: [
+        "Buy America the Beautiful Annual Pass at park entry ($80 — covers all parks this trip)",
+        "Pick up free shuttle map inside the visitor center",
+        "Check Angels Landing permit status at recreation.gov (daily lottery, enter by midnight)",
+      ]},
     ],
   },
+
+  // ── DAY 5 ─────────────────────────────────────────────
   {
     date: "Fri, May 22",
     route: "Zion — Full Day",
     drive: null,
-    sleep: "Springdale / Hurricane",
+    sleep: "Springdale / Watchman Campground",
     phase: "Phase 2 — Utah",
     status: "upcoming",
     plan: [
-      "Early shuttle into Zion Canyon",
-      "Riverside Walk",
-      "Emerald Pools",
-      "Scout Lookout (Angels Landing requires permit)",
-      "The Narrows (conditions permitting)",
+      { section: "🌅 Morning", items: [
+        "Catch the 6 AM shuttle — beat the heat and crowds significantly",
+        "Breakfast at camp before heading out",
+      ]},
+      { section: "🥾 Hikes", items: [
+        "Riverside Walk (2 mi, paved, easy) — canyon narrows at the end, flows into the Narrows",
+        "The Narrows — wade up the Virgin River, rent water shoes at Zion Outfitter in Springdale",
+        "Emerald Pools: Lower → Middle → Upper (3 mi loop, moderate) — hanging garden vibes",
+        "Scout Lookout via West Rim Trail (4 mi RT, strenuous) — best no-permit Angels Landing view",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Pack lunch — eat on the riverbank or at a picnic area",
+        "Dinner: Bit & Spur Restaurant & Saloon (Mexican, local fave), or Spotted Dog Café",
+      ]},
+      { section: "📋 Logistics", items: [
+        "Angels Landing permit: enter the daily lottery at recreation.gov (draws at 5 AM)",
+        "Narrows water level: check at nps.gov/zion before wading",
+        "Rent neoprene socks + walking stick from Zion Outfitter if doing the Narrows",
+      ]},
     ],
-    note: "Angels Landing requires a permit — Scout Lookout is the best no-permit alternative.",
+    note: "If you have an Angels Landing permit, do it first thing — before it gets hot and crowded.",
   },
+
+  // ── DAY 6 ─────────────────────────────────────────────
   {
     date: "Sat, May 23",
     route: "Zion → Central California",
@@ -406,58 +484,124 @@ const DAYS = [
     phase: "Phase 3 — California",
     status: "upcoming",
     plan: [
-      "Positioning drive for Yosemite",
-      "Zion → Las Vegas → Bakersfield / Fresno",
+      { section: "🏨 Stay", items: [
+        "Budget motel in Bakersfield, Visalia, or Fresno — just need a bed",
+        "Extended Stay America Fresno or Courtyard Visalia work well",
+      ]},
+      { section: "🚗 Drive", items: [
+        "Zion → Las Vegas (~2.5 hrs) via I-15 N",
+        "Las Vegas → Barstow → Bakersfield / Fresno (~4.5–6 hrs more)",
+        "Enter Yosemite tomorrow via CA-140 from Merced — most reliable, no snow risk",
+      ]},
+      { section: "🎰 Optional Stop", items: [
+        "Quick Las Vegas Strip walk if arriving mid-afternoon (In-N-Out on the Strip is mandatory)",
+        "Don't lose time here — keep it under an hour",
+      ]},
+      { section: "📋 Logistics", items: [
+        "Gas up in Las Vegas — California gas is more expensive",
+        "Do NOT plan to enter Yosemite from the east (Tioga Pass may still be closed in late May)",
+        "Confirm Yosemite campsite reservation tonight",
+      ]},
     ],
-    note: "Do not rely on Tioga Pass from the east — Yosemite's Tioga Road may not be open yet.",
+    note: "Positioning drive — rest up. Yosemite starts tomorrow.",
   },
+
+  // ── DAY 7 ─────────────────────────────────────────────
   {
     date: "Sun, May 24",
     route: "Central CA → Yosemite",
     drive: "~2.5–4.5 hrs",
-    sleep: "Yosemite / El Portal / Mariposa",
+    sleep: "Yosemite Valley / El Portal / Mariposa",
     phase: "Phase 3 — California",
     status: "upcoming",
     plan: [
-      "Drive into Yosemite Valley",
-      "Tunnel View",
-      "Bridalveil Fall",
-      "Lower Yosemite Fall",
-      "Cook's Meadow",
-      "Valley View at sunset",
+      { section: "🏕️ Stay", items: [
+        "Upper Pines Campground — best location in Yosemite Valley, reservations required at recreation.gov",
+        "OR Lower Pines Campground — on the valley floor near Mirror Lake trailhead",
+        "OR tent cabin at Half Dome Village (Curry Village) — easy booking, affordable",
+        "OR motel in El Portal or Mariposa if camping is full",
+      ]},
+      { section: "🚗 Drive", items: [
+        "Enter via CA-140 (El Portal Road) from Merced — most reliable, open year-round",
+        "Arrive at Tunnel View first — the iconic first look at Yosemite Valley",
+      ]},
+      { section: "📍 First Day Stops", items: [
+        "Tunnel View — El Capitan, Half Dome, and Bridalveil Fall all at once",
+        "Bridalveil Fall — short 0.5 mi walk, expect to get misted",
+        "Valley View — opposite end of the valley, great El Cap framing",
+        "Cook's Meadow stroll — look for deer, evening light on El Cap",
+        "Lower Yosemite Fall — 1 mi easy loop, impressive early-season flow",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Lunch on the road before entering",
+        "Dinner at Valley Lodge Bar & Grill or Degnan's Kitchen in Yosemite Village",
+      ]},
     ],
   },
+
+  // ── DAY 8 ─────────────────────────────────────────────
   {
     date: "Mon, May 25",
     route: "Yosemite — Valley Day",
     drive: null,
-    sleep: "Yosemite / El Portal / Mariposa",
+    sleep: "Yosemite Valley / El Portal / Mariposa",
     phase: "Phase 3 — California",
     status: "upcoming",
     plan: [
-      "Yosemite Falls",
-      "Cook's Meadow Loop",
-      "Sentinel Meadow",
-      "Mirror Lake",
-      "El Capitan Meadow",
-      "Tunnel View / Valley View sunset",
+      { section: "🌅 Morning", items: [
+        "Mirror Lake loop (5 mi, easy) — start at 7 AM for the best Half Dome reflections",
+        "Meadow walk back to camp for breakfast",
+      ]},
+      { section: "🥾 Hikes & Walks", items: [
+        "El Capitan Meadow — watch free soloists on the granite face with binoculars",
+        "Sentinel Meadow → Swinging Bridge — calm meadow views, great for photos",
+        "Cook's Meadow Loop (1 mi, flat) — Cathedral Rocks reflected in the meadow",
+      ]},
+      { section: "🌄 Evening", items: [
+        "Tunnel View at golden hour — best light hits around 7–8 PM in late May",
+        "Valley View for sunset colors on El Capitan",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Picnic lunch in a meadow — pick up supplies at Yosemite Valley Store",
+        "Dinner at Village Grill Deck (burgers & sandwiches, outdoor seating)",
+      ]},
     ],
-    note: "Lower-stress day — just walk around and take it all in.",
+    note: "Low-key day — soak it in. Save legs for the big hike tomorrow.",
   },
+
+  // ── DAY 9 ─────────────────────────────────────────────
   {
     date: "Tue, May 26",
     route: "Yosemite — Big Hike Day",
     drive: null,
-    sleep: "Yosemite / El Portal / Mariposa",
+    sleep: "Yosemite Valley / El Portal / Mariposa",
     phase: "Phase 3 — California",
     status: "upcoming",
     plan: [
-      "Half Dome (if permit secured — start extremely early)",
-      "OR: Mist Trail → Vernal Fall → Nevada Fall",
-      "OR: Glacier Point (if road is open)",
+      { section: "🥾 Option A — Half Dome (permit required)", items: [
+        "Start by 4 AM — 16 mi RT, 4,800 ft gain, cables section near the top",
+        "Enter the day-of lottery at recreation.gov (draws at 7 PM the night before, $10)",
+        "Bring gloves for the cables, plenty of water, and layers",
+      ]},
+      { section: "🥾 Option B — Mist Trail (no permit)", items: [
+        "Mist Trail → Vernal Fall → Nevada Fall (7 mi RT, 2,000 ft gain)",
+        "Start by 7 AM — waterfalls are at full roar in late May, bring a rain jacket",
+        "Vernal Fall is one of the most spectacular waterfalls in the US at peak flow",
+      ]},
+      { section: "🥾 Option C — Glacier Point", items: [
+        "Drive or take the bus up Glacier Point Road (if open in late May)",
+        "30-minute drive to a panoramic overlook of Half Dome, Nevada Fall, and the full valley",
+        "Combine with a walk down Four Mile Trail (4.8 mi, strenuous downhill)",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Pack a full day's food — no services on trail",
+        "Dinner at Yosemite Valley Lodge or a celebratory sit-down at The Ahwahnee Bar (walk-ins ok)",
+      ]},
     ],
-    note: "Half Dome requires a lottery permit. Mist Trail is the best no-permit alternative.",
+    note: "Half Dome lottery fills fast — try the night before. Mist Trail is never a bad backup.",
   },
+
+  // ── DAY 10 ─────────────────────────────────────────────
   {
     date: "Wed, May 27",
     route: "Yosemite → SF → Monterey → SLO",
@@ -466,13 +610,35 @@ const DAYS = [
     phase: "Phase 3 — California",
     status: "upcoming",
     plan: [
-      "Leave Yosemite early",
-      "San Francisco — Golden Gate, Lands End, Palace of Fine Arts",
-      "Monterey — Cannery Row, Carmel Beach, 17-Mile Drive",
-      "Continue south to San Luis Obispo / Pismo Beach",
+      { section: "🏨 Stay", items: [
+        "SLO: HI Hostel Obispo (cheap, social, great location), or Airbnb near downtown",
+        "Pismo Beach: Adagio Inn or beachside Airbnb — wake up to the ocean",
+      ]},
+      { section: "🌉 San Francisco", items: [
+        "Golden Gate Bridge — walk the bridge or shoot from Vista Point on the Marin side",
+        "Lands End Coastal Trail (3.4 mi) — hidden ruins, ocean views, connecting to Baker Beach",
+        "Palace of Fine Arts — quick stop for photos",
+        "Ghirardelli Square for a hot fudge sundae (optional, obviously mandatory)",
+      ]},
+      { section: "🦦 Monterey", items: [
+        "Cannery Row — walk along the waterfront",
+        "Monterey Bay Aquarium (2–3 hrs if you stop — sea otters are worth it)",
+        "17-Mile Drive through Pebble Beach — Lone Cypress, Bird Rock, ghost tree",
+        "Carmel-by-the-Sea Beach — white sand, turquoise water, surreal for California",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Clam chowder in a bread bowl on Cannery Row (Old Fisherman's Grotto)",
+        "Dinner in SLO: Firestone Grill (tri-tip sandwich!), or Luna Red",
+      ]},
+      { section: "📋 Logistics", items: [
+        "Leave Yosemite by 8 AM to have enough time at both SF and Monterey",
+        "17-Mile Drive toll is $12 — cash or card at the gate",
+      ]},
     ],
-    note: "Sleep in SLO or Pismo Beach — makes May 28 much easier.",
+    note: "Sleep in SLO or Pismo — cuts LA drive to ~3 hrs tomorrow instead of 6+.",
   },
+
+  // ── DAY 11 ─────────────────────────────────────────────
   {
     date: "Thu, May 28",
     route: "Coast → Los Angeles",
@@ -481,12 +647,25 @@ const DAYS = [
     phase: "Phase 3 — California",
     status: "upcoming",
     plan: [
-      "Easy morning",
-      "Optional Santa Barbara stop",
-      "Optional Malibu / Santa Monica stop",
-      "Arrive LA by night",
+      { section: "🏨 Stay", items: [
+        "Burbank: Hotel Amarano, Safari Inn, or family/friend's place",
+        "Hollywood / Silver Lake: Airbnb for more of a local feel",
+      ]},
+      { section: "📍 Stops Along the Way", items: [
+        "Santa Barbara: Stearns Wharf, State Street walk, mission architecture (~45 min stop)",
+        "El Matador State Beach in Malibu — dramatic sea stacks, one of the best beaches in CA",
+        "Malibu Pier for photos, then cruise the PCH into the city",
+        "Santa Monica Pier: quick walk on the boardwalk",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Breakfast in SLO before leaving",
+        "In-N-Out in LA — Double-Double Animal Style (this is non-negotiable)",
+        "Dinner in Burbank or Los Feliz: Caioti Pizza, Little Dom's, or family dinner",
+      ]},
     ],
   },
+
+  // ── DAY 12 ─────────────────────────────────────────────
   {
     date: "Fri, May 29",
     route: "Los Angeles — Day 1",
@@ -495,12 +674,26 @@ const DAYS = [
     phase: "Phase 3 — California",
     status: "upcoming",
     plan: [
-      "Griffith Observatory",
-      "Burbank / Studio City",
-      "Santa Monica & Venice Beach",
-      "Family / friend time",
+      { section: "🔭 Morning", items: [
+        "Griffith Observatory — free entry, best views of the Hollywood Sign and downtown skyline",
+        "Hike up from the Greek Theatre parking lot for extra credit",
+      ]},
+      { section: "🎬 Midday", items: [
+        "Burbank / Studio City stroll — Warner Bros. lot area, Magnolia Blvd",
+        "Lunch in Studio City: Aeirloom Bakery or the Trails Café up in Griffith Park",
+      ]},
+      { section: "🌊 Afternoon", items: [
+        "Santa Monica Beach & Pier — rent bikes and ride the Strand south toward Venice",
+        "Venice Beach Boardwalk — street performers, Muscle Beach, Abbott Kinney boutiques",
+        "Sunset at the Santa Monica Pier or Palisades Park bluff",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Dinner: Gjusta in Venice, Erewhon smoothie bar, or family dinner in Burbank",
+      ]},
     ],
   },
+
+  // ── DAY 13 ─────────────────────────────────────────────
   {
     date: "Sat, May 30",
     route: "Los Angeles — Day 2",
@@ -509,43 +702,88 @@ const DAYS = [
     phase: "Phase 3 — California",
     status: "upcoming",
     plan: [
-      "Malibu or Pasadena",
-      "Fill gas, pack car at night",
-      "Download offline maps",
-      "Confirm Moab lodging",
-      "Sleep early",
+      { section: "🌿 Activities (pick 1–2)", items: [
+        "Getty Center — free admission, incredible views + world-class art (reserve timed entry)",
+        "Pasadena: Old Town shops, Colorado Street Bridge, Huntington Library gardens",
+        "Malibu: El Matador Beach if you didn't stop on Day 11",
+        "Manhattan Beach or Hermosa Beach — laid-back, great for a beach hang",
+        "LACMA — free after 3 PM on some days, giant street lamp installation out front",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Brunch: Sqirl in Silver Lake (iconic açaí bowls & toast), or République in Mid-City",
+        "Dinner: Koreatown BBQ (Park's BBQ, Genwa) — group BBQ experience",
+      ]},
+      { section: "📋 Evening Logistics (important!)", items: [
+        "Pack the car tonight — everything loaded before bed",
+        "Fill gas tank tonight (leave by 6 AM tomorrow)",
+        "Download offline maps for Utah: Moab, Arches National Park",
+        "Confirm Moab lodging reservation",
+        "Set alarm for 5:30 AM",
+      ]},
     ],
-    note: "Pack everything the night before — it's a 10+ hour drive tomorrow.",
+    note: "Pack everything tonight. It's a 10–11 hour drive tomorrow — leave early or suffer.",
   },
+
+  // ── DAY 14 ─────────────────────────────────────────────
   {
     date: "Sun, May 31",
     route: "LA → Moab / Arches",
     drive: "~10–11 hrs",
-    sleep: "Moab",
+    sleep: "Moab, UT",
     phase: "Phase 4 — Desert & Home",
     status: "upcoming",
     plan: [
-      "Leave LA by 6–7 AM",
-      "Arrive Moab ~5–7 PM",
-      "Park Avenue & Balanced Rock (evening)",
-      "Windows Section & Double Arch",
-      "Delicate Arch Viewpoint at sunset",
+      { section: "🏕️ Stay", items: [
+        "Arches Campground — inside the park gates, book at recreation.gov (very competitive)",
+        "OR Canyonlands Campground in town — full hookups, pool, great base",
+        "OR Aarchway Inn or Moab Valley RV Resort",
+      ]},
+      { section: "🚗 Drive", items: [
+        "Leave LA by 6 AM — I-15 N through Las Vegas (~4 hrs to Vegas)",
+        "Gas in Las Vegas, snacks packed the night before",
+        "Vegas → St. George → I-70 E → Moab (~6–7 hrs more)",
+        "Arrive Moab ~5–7 PM depending on stops",
+      ]},
+      { section: "🪨 Evening at Arches", items: [
+        "Park Avenue Viewpoint — massive sandstone fins at golden hour",
+        "Balanced Rock — 0.3 mi easy walk, iconic shot",
+        "Windows Section — North Window, South Window, Double Arch (0.7 mi loop)",
+        "Delicate Arch Lower Viewpoint — no hike needed, stunning at sunset",
+      ]},
+      { section: "🍽️ Food", items: [
+        "Pack snacks and lunch for the drive",
+        "Dinner in Moab: Moab Brewery (reliable), Spoke on Center (great burgers)",
+      ]},
     ],
-    note: "Hardest drive of the trip — leave as early as possible.",
+    note: "Longest drive of the trip — leave as early as humanly possible.",
   },
+
+  // ── DAY 15 ─────────────────────────────────────────────
   {
     date: "Mon, June 1",
     route: "Moab → Boulder 🏠",
     drive: "~6–6.5 hrs",
-    sleep: "Boulder",
+    sleep: "Boulder — Home!",
     phase: "Phase 4 — Desert & Home",
     status: "upcoming",
     plan: [
-      "Leave Moab by 6:30 AM",
-      "Grand Junction quick stop (~9:30–10 AM)",
-      "Arrive Boulder ~3 PM 🎉",
+      { section: "🌅 Morning — Arches", items: [
+        "Delicate Arch hike (3 mi RT, 480 ft gain) — start by 5:30 AM for sunrise light",
+        "Fiery Furnace Viewpoint on the way out — dramatic labyrinth of fins",
+        "Be back at the car by 8 AM at the latest",
+      ]},
+      { section: "🚗 Drive Home", items: [
+        "Moab → Grand Junction, CO (~1.5 hrs) — quick breakfast stop",
+        "Grand Junction → Glenwood Springs → Denver → Boulder (~4.5 hrs)",
+        "Stop in Glenwood Springs if you want coffee + a quick stretch",
+        "Arrive Boulder ~2:30–3 PM 🎉",
+      ]},
+      { section: "🍺 Celebrate", items: [
+        "Sanitas Brewing Co. or Backcountry Pizza — earned it",
+        "Chautauqua Park sunset walk if you have the legs left",
+      ]},
     ],
-    note: "Don't plan Arches in the morning — you need to leave by 6:30 to hit Boulder by 3.",
+    note: "Leave by 7 AM. Skip the morning Arches hike if you'd rather sleep in and drive relaxed.",
   },
 ];
 

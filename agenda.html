@@ -437,11 +437,22 @@
       flex-shrink: 0;
     }
 
+    .day-section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--gold);
+      margin: 12px 0 4px;
+    }
+
+    .day-section-label:first-child { margin-top: 0; }
+
     .day-note {
       font-size: 0.78rem;
       color: var(--text-muted);
       font-style: italic;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     @media (max-width: 600px) {
@@ -649,8 +660,21 @@
       const isPast  = day.status === 'past';
       const cardCls = 'day-card' + (isToday ? ' today' : isPast ? ' past' : '');
 
-      const planItems = (day.plan || [])
-        .map(function(item) { return '<li>' + item + '</li>'; }).join('');
+      // Render plan — supports flat strings OR { section, items } objects
+      var planItems = '';
+      (day.plan || []).forEach(function(entry) {
+        if (typeof entry === 'string') {
+          planItems += '<li>' + entry + '</li>';
+        } else if (entry && entry.section) {
+          planItems += '</ul><div class="day-section-label">' + entry.section + '</div><ul class="day-plan-list" style="margin-bottom:0">'
+            + (entry.items || []).map(function(i) { return '<li>' + i + '</li>'; }).join('');
+        }
+      });
+      // Wrap in outer ul only if we have content; strip any leading </ul>
+      if (planItems) {
+        planItems = planItems.replace(/^<\/ul>/, '');
+        planItems = '<ul class="day-plan-list">' + planItems + '</ul>';
+      }
 
       const driveHtml = day.drive
         ? '<span class="day-badge">' + day.drive + '</span>' : '';
@@ -673,7 +697,7 @@
         + '</svg>'
         + '</div>'
         + '<div class="day-card-body"><div class="day-card-inner">'
-        + (planItems ? '<ul class="day-plan-list">' + planItems + '</ul>' : '')
+        + planItems
         + (day.note ? '<div class="day-note">' + day.note + '</div>' : '')
         + '</div></div>'
         + '</div>';
