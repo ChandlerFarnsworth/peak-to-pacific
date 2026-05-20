@@ -254,7 +254,7 @@
             <span class="miles-driven" id="milesDriven">0</span>
             <span style="font-size:.85rem;color:var(--text-muted);margin-left:6px">miles</span>
           </div>
-          <div style="font-size:.82rem;color:var(--text-muted)" id="milesTotalLabel">of ~4,200 total</div>
+          <div style="font-size:.82rem;color:var(--text-muted)" id="milesTotalLabel"></div>
         </div>
         <div class="progress-bar">
           <div class="progress-bar-fill" id="milesFill" style="width:0%"></div>
@@ -280,6 +280,26 @@
           <span class="big-unit" id="stopsTotal"></span>
         </div>
         <div class="stat-subtext" id="stopsSubtext"></div>
+      </div>
+
+      <!-- Hike Miles -->
+      <div class="big-stat">
+        <div class="stat-eyebrow">Miles Hiked</div>
+        <div>
+          <span class="big-number" id="hikesNum">0</span>
+          <span class="big-unit">mi</span>
+        </div>
+        <div class="stat-subtext" id="hikesSubtext"></div>
+      </div>
+
+      <!-- Nights Camped -->
+      <div class="big-stat">
+        <div class="stat-eyebrow">Nights Camped</div>
+        <div>
+          <span class="big-number" id="campsNum">0</span>
+          <span class="big-unit">nights</span>
+        </div>
+        <div class="stat-subtext" id="campsSubtext"></div>
       </div>
 
       <!-- Spotify Playlist -->
@@ -330,12 +350,13 @@
   const milesPct = STATS.totalMiles > 0
     ? Math.min(100, Math.round((STATS.milesDriven / STATS.totalMiles) * 100))
     : 0;
-  document.getElementById('milesDriven').textContent = STATS.milesDriven.toLocaleString();
-  document.getElementById('milesFill').style.width   = milesPct + '%';
+  document.getElementById('milesDriven').textContent   = STATS.milesDriven.toLocaleString();
+  document.getElementById('milesTotalLabel').textContent = 'of ~' + STATS.totalMiles.toLocaleString() + ' total';
+  document.getElementById('milesFill').style.width      = milesPct + '%';
   document.getElementById('milesSubtext').textContent =
     milesPct > 0
       ? `${(STATS.totalMiles - STATS.milesDriven).toLocaleString()} miles remaining · ${milesPct}% complete`
-      : 'Odometer starts ticking on May 12 🚗';
+      : 'Odometer starts ticking on May 18 🚗';
 
   // ── Days ─────────────────────────────────────────────────
   let daysNum = STATS.daysOnRoad;
@@ -361,6 +382,16 @@
   document.getElementById('stopsSubtext').textContent =
     done > 0 ? `${STOPS.length - done} stops to go` : `${STOPS.length} stops planned`;
 
+  // ── Hike Miles ────────────────────────────────────────────
+  document.getElementById('hikesNum').textContent    = (STATS.hikesMiles || 0);
+  document.getElementById('hikesSubtext').textContent =
+    (STATS.hikesMiles || 0) > 0 ? 'and counting 🥾' : 'First hike coming up';
+
+  // ── Nights Camped ─────────────────────────────────────────
+  document.getElementById('campsNum').textContent    = (STATS.nightsCamped || 0);
+  document.getElementById('campsSubtext').textContent =
+    (STATS.nightsCamped || 0) > 0 ? 'under the stars ⛺' : 'First camp coming up';
+
   // ── States ────────────────────────────────────────────────
   const allStates = [
     {abbr:'CO',name:'Colorado'}, {abbr:'WY',name:'Wyoming'}, {abbr:'UT',name:'Utah'},
@@ -376,14 +407,14 @@
   // ── Highlights ────────────────────────────────────────────
   const highlightItems = [
     {icon:'🎓', text:'Graduated from University of Colorado Boulder', loc:'Boulder, CO'},
-    {icon:'🏔️', text:'Schwabacher Landing, Jenny Lake & Snake River Overlook', loc:'Grand Teton NP'},
-    {icon:'🏙️', text:'Rest day — real bed, laundry, restock', loc:'Salt Lake City, UT'},
-    {icon:'🏜️', text:'Riverside Walk, Emerald Pools & Scout Lookout', loc:'Zion NP'},
+    {icon:'🌅', text:'Balanced Rock, Windows Section & Delicate Arch hike', loc:'Arches NP ✅'},
+    {icon:'🏔️', text:'Jenny Lake Ferry, Hidden Falls & Inspiration Point', loc:'Grand Teton NP'},
+    {icon:'🏜️', text:'Riverside Walk, Emerald Pools & The Narrows', loc:'Zion NP'},
     {icon:'🏞️', text:'Half Dome or Mist Trail — Vernal & Nevada Falls', loc:'Yosemite NP'},
-    {icon:'🌉', text:'Golden Gate Bridge & Lands End', loc:'San Francisco, CA'},
+    {icon:'🌉', text:'Golden Gate Bridge & Lands End coastal trail', loc:'San Francisco, CA'},
     {icon:'🌊', text:'Cannery Row, Carmel Beach & 17-Mile Drive', loc:'Monterey, CA'},
-    {icon:'🎬', text:'Griffith Observatory, Santa Monica & Malibu', loc:'Los Angeles, CA'},
-    {icon:'🌅', text:'Balanced Rock, Windows Section & Delicate Arch', loc:'Moab / Arches NP'},
+    {icon:'🎬', text:'Griffith Observatory, Venice Beach & Malibu', loc:'Los Angeles, CA'},
+    {icon:'🎰', text:'Strip walk & Bellagio fountains on the drive home', loc:'Las Vegas, NV'},
   ];
   document.getElementById('highlightsList').innerHTML = highlightItems.map(h => `
     <div class="highlight-row">

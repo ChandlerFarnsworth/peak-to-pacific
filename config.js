@@ -221,15 +221,15 @@ const STOPS = [
 // Update these as you go!
 // ─────────────────────────────────────────────
 const STATS = {
-  milesDriven: 0,
-  totalMiles: 3400,        // estimated total trip miles
-  stopsCompleted: 0,
+  milesDriven: 660,        // Boulder → Arches (~420 mi) + Arches → SLC (~240 mi)
+  totalMiles: 3600,        // estimated total trip miles (updated for new Arches-first route)
+  stopsCompleted: 2,       // Boulder (departed) + Arches (done)
   totalStops: 11,
-  statesVisited: [],       // e.g. ["CO", "WY", "UT", "NV", "CA"]
-  daysOnRoad: 0,
-  tripStartDate: "2026-05-18", // UPDATE to actual start date
-  hikesMiles: 0,
-  nightsCamped: 0,
+  statesVisited: ["CO", "UT"],
+  daysOnRoad: 2,
+  tripStartDate: "2026-05-18",
+  hikesMiles: 6,           // Arches: Delicate Arch (3 mi) + Windows/Park Ave (~3 mi)
+  nightsCamped: 1,         // One night in Moab at Arches
 };
 
 // ─────────────────────────────────────────────
