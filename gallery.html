@@ -373,7 +373,7 @@
     <div class="hero-content">
       <div class="hero-eyebrow">Along the Way</div>
       <h1 class="hero-title">Photo Gallery</h1>
-      <p class="hero-subtitle">Moments from the road — drop a photo in, it shows up here</p>
+      <p class="hero-subtitle">Moments from the road — updated live from our Google Photos album</p>
     </div>
   </div>
 </div>
@@ -386,12 +386,40 @@
 <main class="page-content">
   <div class="container">
 
-    <!-- Filter + count bar -->
-    <div class="filter-bar" id="filterBar">
-      <span class="photo-count" id="photoCount">Loading photos…</span>
+    <!-- Google Photos card (shown when GOOGLE_PHOTOS_URL is set) -->
+    <div class="gphoto-card" id="gphotoCard" style="display:none">
+      <div class="gphoto-header">
+        <div class="gphoto-icon">📸</div>
+        <div>
+          <div class="gphoto-title">Trip Album</div>
+          <div class="gphoto-sub">Peak to Pacific · Google Photos</div>
+        </div>
+      </div>
+      <div class="gphoto-body">
+        <div class="gphoto-desc">
+          All our photos from the road — updated in real time as we go. Tap the button to browse
+          the full album in Google Photos.
+        </div>
+        <a id="gphotoLink" href="#" target="_blank" rel="noopener" class="gphoto-btn">
+          View Album →
+        </a>
+      </div>
     </div>
 
-    <!-- Gallery grid -->
+    <!-- Setup nudge (shown when neither Google Photos nor Cloudinary is configured) -->
+    <div class="gphoto-setup" id="setupNotice" style="display:none">
+      <strong>📸 Add your Google Photos album:</strong> Open <code>config.js</code> and paste your
+      shared album link into <code>GOOGLE_PHOTOS_URL</code>. Takes 2 minutes — see the comment in
+      the file for step-by-step instructions.
+    </div>
+
+    <!-- Filter bar (shown when falling back to Cloudinary / local photos) -->
+    <div class="filter-bar" id="filterBar" style="display:none">
+      <a href="upload.html" class="upload-cta">📱 Upload Photos</a>
+      <span class="photo-count" id="photoCount"></span>
+    </div>
+
+    <!-- Gallery / loading / empty state (Cloudinary fallback) -->
     <div id="galleryContainer"></div>
 
   </div>
@@ -412,144 +440,174 @@
     document.getElementById('navLinks').classList.toggle('open');
   });
 
-  // ── Config ─────────────────────────────────────────────────
-  const TOTAL   = typeof GALLERY_COUNT !== 'undefined' ? GALLERY_COUNT : 50;
-  const container = document.getElementById('galleryContainer');
-  const countEl   = document.getElementById('photoCount');
-  const filterBar  = document.getElementById('filterBar');
+  const container   = document.getElementById('galleryContainer');
+  const filterBar   = document.getElementById('filterBar');
+  const gphotoCard  = document.getElementById('gphotoCard');
+  const setupNotice = document.getElementById('setupNotice');
+  const cloudName   = typeof CLOUDINARY !== 'undefined' ? CLOUDINARY.cloudName : null;
+  const tag         = typeof CLOUDINARY !== 'undefined' ? CLOUDINARY.tag : 'peak-to-pacific';
+  const gpUrl       = typeof GOOGLE_PHOTOS_URL !== 'undefined' ? GOOGLE_PHOTOS_URL : '';
 
-  // Build a lookup map from the optional GALLERY metadata array
-  const META = {};
-  (typeof GALLERY !== 'undefined' ? GALLERY : []).forEach(function(g) {
-    if (g.n) META[g.n] = g;
-  });
+  let allPhotos    = [];
+  let activeFilter = 'All';
+  let currentIdx   = 0;
 
-  // loadedPhotos is built as images successfully load
-  var loadedPhotos = [];
-  var activeFilter = 'All';
-  var currentIdx   = 0;
-
-  // ── Render all probes up-front ─────────────────────────────
-  // Images that don't exist get removed via onerror.
-  // Images that load call photoLoaded() to register themselves.
-  function renderGrid() {
-    var html = '<div class="gallery-grid" id="photoGrid">';
-    for (var i = 1; i <= TOTAL; i++) {
-      var m = META[i] || {};
-      var capHtml = (m.caption || m.location)
-        ? '<div class="gallery-caption">'
-            + (m.caption  ? '<div class="cap-text">' + m.caption  + '</div>' : '')
-            + (m.location ? '<div class="cap-loc">📍 ' + m.location + '</div>' : '')
-          + '</div>'
-        : '';
-      html += '<div class="gallery-item" id="gi-' + i + '" data-n="' + i
-            + '" data-loc="' + (m.location || '') + '"'
-            + ' style="display:none" tabindex="0" role="button">'
-            + '<img src="images/gallery/' + i + '.JPG"'
-            + ' alt="' + (m.caption || 'Photo ' + i) + '"'
-            + ' loading="lazy"'
-            + ' onload="photoLoaded(' + i + ')"'
-            + ' onerror="document.getElementById(\'gi-' + i + '\').remove()"'
-            + '/>'
-            + capHtml
-            + '</div>';
+  // ── Route: Google Photos → Cloudinary → Local ─────────────
+  function init() {
+    if (gpUrl && gpUrl.trim() !== '') {
+      // Primary: show Google Photos card
+      document.getElementById('gphotoLink').href = gpUrl.trim();
+      gphotoCard.style.display = '';
+    } else if (cloudName && cloudName !== 'YOUR_CLOUD_NAME') {
+      // Secondary: load from Cloudinary
+      filterBar.style.display = '';
+      loadCloudinary();
+    } else {
+      // Nothing configured yet — show setup nudge + local fallback
+      setupNotice.style.display = '';
+      showLocalFallback();
     }
-    html += '</div>';
-    container.innerHTML = html;
-
-    // Delegated click handler
-    container.addEventListener('click', function(e) {
-      var item = e.target.closest('.gallery-item');
-      if (!item) return;
-      var n = parseInt(item.dataset.n);
-      var visible = getVisible();
-      var idx = visible.findIndex(function(p) { return p.n === n; });
-      if (idx >= 0) openLightbox(visible, idx);
-    });
-    container.addEventListener('keydown', function(e) {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
-      var item = e.target.closest('.gallery-item');
-      if (!item) return;
-      var n = parseInt(item.dataset.n);
-      var visible = getVisible();
-      var idx = visible.findIndex(function(p) { return p.n === n; });
-      if (idx >= 0) openLightbox(visible, idx);
-    });
   }
 
-  function photoLoaded(n) {
-    var item = document.getElementById('gi-' + n);
-    if (!item) return;
-    item.style.display = '';
-    var m = META[n] || {};
-    if (!loadedPhotos.find(function(p) { return p.n === n; })) {
-      loadedPhotos.push({ n: n, url: 'images/gallery/' + n + '.JPG', caption: m.caption || '', location: m.location || '' });
-      loadedPhotos.sort(function(a, b) { return a.n - b.n; });
-    }
-    updateBar();
+  // ── Skeleton loading state ─────────────────────────────────
+  function showSkeleton() {
+    const heights = [180, 240, 160, 210, 190, 250, 170, 230];
+    container.innerHTML = `
+      <div class="skeleton-grid">
+        ${heights.map(h => `<div class="skeleton-item" style="height:${h}px"></div>`).join('')}
+      </div>
+    `;
   }
 
-  // ── Filter bar ─────────────────────────────────────────────
-  function updateBar() {
-    var count = loadedPhotos.length;
-    countEl.textContent = count + ' photo' + (count !== 1 ? 's' : '');
+  // ── Fetch from Cloudinary ──────────────────────────────────
+  async function loadCloudinary() {
+    showSkeleton();
+    try {
+      const url = `https://res.cloudinary.com/${cloudName}/image/list/${tag}.json`;
+      const res  = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const resources = data.resources || [];
 
-    // Rebuild location filters if any metadata exists
-    var locs = ['All'].concat(
-      loadedPhotos
-        .map(function(p) { return p.location; })
-        .filter(function(l, i, a) { return l && a.indexOf(l) === i; })
-    );
-    if (locs.length > 2) {
-      filterBar.querySelectorAll('.filter-btn').forEach(function(b) { b.remove(); });
-      locs.forEach(function(loc) {
-        var btn = document.createElement('button');
-        btn.className = 'filter-btn' + (loc === activeFilter ? ' active' : '');
-        btn.textContent = loc;
-        btn.addEventListener('click', function() {
-          activeFilter = loc;
-          filterBar.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
-          btn.classList.add('active');
-          applyFilter();
-        });
-        filterBar.insertBefore(btn, countEl);
+      allPhotos = resources.map(r => ({
+        url:      `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto,w_1200/${r.public_id}.${r.format}`,
+        thumb:    `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto,w_600/${r.public_id}.${r.format}`,
+        caption:  r.context?.custom?.caption || '',
+        location: r.context?.custom?.location || extractLocation(r.public_id),
+        created:  r.created_at,
+      }));
+
+      allPhotos.sort((a, b) => new Date(b.created) - new Date(a.created));
+      buildFilters();
+      renderGallery();
+    } catch (err) {
+      console.warn('Cloudinary fetch failed, showing local fallback:', err.message);
+      showLocalFallback();
+    }
+  }
+
+  function extractLocation(publicId) {
+    const parts = publicId.split('/');
+    if (parts.length > 1) return parts[0].replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    return '';
+  }
+
+  // ── Fallback to local config.js GALLERY array ─────────────
+  function showLocalFallback() {
+    if (!GALLERY || GALLERY.length === 0) {
+      container.innerHTML = `
+        <div class="gallery-empty">
+          <div class="empty-icon">📸</div>
+          <h3>Photos coming soon!</h3>
+          <p>We're still on the road collecting memories.<br/>
+          Add your Google Photos shared album link to <code>config.js</code> to show photos here.</p>
+        </div>
+      `;
+      return;
+    }
+
+    allPhotos = GALLERY.map(p => ({
+      url:      `photos/${p.file}`,
+      thumb:    `photos/${p.file}`,
+      caption:  p.caption || '',
+      location: p.location || '',
+    }));
+
+    filterBar.style.display = '';
+    buildFilters();
+    renderGallery();
+  }
+
+  // ── Build filter buttons ───────────────────────────────────
+  function buildFilters() {
+    const locations = ['All', ...new Set(allPhotos.map(p => p.location).filter(Boolean))];
+    filterBar.querySelectorAll('.filter-btn').forEach(b => b.remove());
+    const uploadBtn = filterBar.querySelector('.upload-cta');
+    locations.forEach(loc => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn' + (loc === 'All' ? ' active' : '');
+      btn.textContent = loc;
+      btn.dataset.loc = loc;
+      btn.addEventListener('click', () => {
+        activeFilter = loc;
+        filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderGallery();
       });
+      filterBar.insertBefore(btn, uploadBtn);
+    });
+    document.getElementById('photoCount').textContent = `${allPhotos.length} photo${allPhotos.length !== 1 ? 's' : ''}`;
+  }
+
+  // ── Render gallery grid ────────────────────────────────────
+  function renderGallery() {
+    const filtered = activeFilter === 'All'
+      ? allPhotos
+      : allPhotos.filter(p => p.location === activeFilter);
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="gallery-empty" style="padding:40px 24px">
+          <div class="empty-icon">🔍</div>
+          <h3>No photos here yet</h3>
+          <p>Be the first to snap something at ${activeFilter}!</p>
+        </div>
+      `;
+      return;
     }
-  }
 
-  function getVisible() {
-    return activeFilter === 'All'
-      ? loadedPhotos
-      : loadedPhotos.filter(function(p) { return p.location === activeFilter; });
-  }
+    container.innerHTML = `
+      <div class="gallery-grid">
+        ${filtered.map((photo) => `
+          <div class="gallery-item" data-full-idx="${allPhotos.indexOf(photo)}" tabindex="0" role="button">
+            <img
+              src="${photo.thumb || photo.url}"
+              alt="${photo.caption || 'Trip photo'}"
+              loading="lazy"
+              onerror="this.parentElement.style.display='none'"
+            />
+            <div class="gallery-caption">
+              ${photo.caption  ? `<div class="cap-text">${photo.caption}</div>` : ''}
+              ${photo.location ? `<div class="cap-loc">📍 ${photo.location}</div>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
 
-  function applyFilter() {
-    loadedPhotos.forEach(function(p) {
-      var el = document.getElementById('gi-' + p.n);
-      if (!el) return;
-      var show = activeFilter === 'All' || p.location === activeFilter;
-      el.style.display = show ? '' : 'none';
+    container.querySelectorAll('.gallery-item').forEach(item => {
+      const open = () => openLightbox(parseInt(item.dataset.fullIdx));
+      item.addEventListener('click', open);
+      item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') open(); });
     });
   }
 
   // ── Lightbox ───────────────────────────────────────────────
-  var lbPhotos = [];
-
-  function openLightbox(photos, idx) {
-    lbPhotos    = photos;
-    currentIdx  = idx;
-    showLb();
+  function openLightbox(idx) {
+    currentIdx = idx;
+    updateLightbox();
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
-  }
-
-  function showLb() {
-    var p = lbPhotos[currentIdx];
-    if (!p) return;
-    document.getElementById('lbImg').src            = p.url;
-    document.getElementById('lbImg').alt            = p.caption || '';
-    document.getElementById('lbCaption').textContent = p.caption || '';
-    document.getElementById('lbLoc').textContent     = p.location ? '📍 ' + p.location : '';
   }
 
   function closeLightbox() {
@@ -557,43 +615,38 @@
     document.body.style.overflow = '';
   }
 
+  function updateLightbox() {
+    const p = allPhotos[currentIdx];
+    if (!p) return;
+    document.getElementById('lbImg').src = p.url;
+    document.getElementById('lbImg').alt = p.caption || '';
+    document.getElementById('lbCaption').textContent = p.caption || '';
+    document.getElementById('lbLoc').textContent = p.location ? `📍 ${p.location}` : '';
+  }
+
   document.getElementById('lbClose').addEventListener('click', closeLightbox);
-  document.getElementById('lightbox').addEventListener('click', function(e) {
+  document.getElementById('lightbox').addEventListener('click', e => {
     if (e.target === document.getElementById('lightbox')) closeLightbox();
   });
-  document.getElementById('lbPrev').addEventListener('click', function(e) {
+  document.getElementById('lbPrev').addEventListener('click', e => {
     e.stopPropagation();
-    currentIdx = (currentIdx - 1 + lbPhotos.length) % lbPhotos.length;
-    showLb();
+    currentIdx = (currentIdx - 1 + allPhotos.length) % allPhotos.length;
+    updateLightbox();
   });
-  document.getElementById('lbNext').addEventListener('click', function(e) {
+  document.getElementById('lbNext').addEventListener('click', e => {
     e.stopPropagation();
-    currentIdx = (currentIdx + 1) % lbPhotos.length;
-    showLb();
+    currentIdx = (currentIdx + 1) % allPhotos.length;
+    updateLightbox();
   });
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', e => {
     if (!document.getElementById('lightbox').classList.contains('open')) return;
     if (e.key === 'Escape')      closeLightbox();
-    if (e.key === 'ArrowLeft')  { currentIdx = (currentIdx - 1 + lbPhotos.length) % lbPhotos.length; showLb(); }
-    if (e.key === 'ArrowRight') { currentIdx = (currentIdx + 1) % lbPhotos.length; showLb(); }
+    if (e.key === 'ArrowLeft')  { currentIdx = (currentIdx - 1 + allPhotos.length) % allPhotos.length; updateLightbox(); }
+    if (e.key === 'ArrowRight') { currentIdx = (currentIdx + 1) % allPhotos.length; updateLightbox(); }
   });
 
-  // ── Empty state (shown after a short wait if nothing loaded) ─
-  setTimeout(function() {
-    if (loadedPhotos.length === 0) {
-      countEl.textContent = '';
-      container.innerHTML = '<div class="gallery-empty">'
-        + '<div class="empty-icon">📸</div>'
-        + '<h3>Photos coming soon!</h3>'
-        + '<p>Drop your photos into the <code>images/gallery/</code> folder named '
-        + '<code>1.JPG</code>, <code>2.JPG</code>, etc. and push to GitHub — '
-        + 'they\'ll appear here automatically.</p>'
-        + '</div>';
-    }
-  }, 4000);
-
-  // ── Go ─────────────────────────────────────────────────────
-  renderGrid();
+  // ── Kick it off ────────────────────────────────────────────
+  init();
 </script>
 </body>
 </html>
