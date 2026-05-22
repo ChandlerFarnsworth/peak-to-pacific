@@ -19,10 +19,10 @@
 // Update this every time you move to a new spot.
 // ─────────────────────────────────────────────
 const CURRENT_LOCATION = {
-  lat: 40.7608,
-  lng: -111.8910,
-  label: "Salt Lake City, UT",
-  note: "Day 2 — Airbnb in SLC after Arches 🏙️",
+  lat: 37.2982,
+  lng: -113.0263,
+  label: "En route to Zion NP",
+  note: "Day 5 — driving from SLC to Zion 🚗",
 };
 
 // ─────────────────────────────────────────────
@@ -70,12 +70,12 @@ const STOPS = [
     name: "Salt Lake City, UT",
     subtitle: "Utah · Airbnb (tonight) & Family Friends (May 21)",
     dates: "May 19 & 21",
-    status: "current",
+    status: "completed",
     lat: 40.7608,
     lng: -111.8910,
     highlights: [
-      "Airbnb tonight — rest and restock",
-      "Back again May 21 to stay with family friends",
+      "Airbnb night (May 19) — rested and restocked",
+      "Back May 21 to stay with family friends",
       "Laundry, food run, gear check",
     ],
     emoji: "🏙️",
@@ -87,13 +87,13 @@ const STOPS = [
     name: "Grand Teton National Park",
     subtitle: "Wyoming",
     dates: "May 20–21",
-    status: "upcoming",
+    status: "completed",
     lat: 43.7904,
     lng: -110.6818,
     highlights: [
       "Jenny Lake Ferry → Hidden Falls → Inspiration Point",
       "Overnight at Jenny Lake Campground",
-      "Schwabacher Landing & Mormon Row",
+      "Schwabacher Landing sunrise & Mormon Row",
       "Snake River Overlook",
     ],
     emoji: "🏔️",
@@ -102,10 +102,27 @@ const STOPS = [
   {
     id: 5,
     phase: "Phase 2 — Utah",
+    name: "Yellowstone National Park",
+    subtitle: "Wyoming · Surprise stop! ✅",
+    dates: "May 21",
+    status: "completed",
+    lat: 44.4280,
+    lng: -110.5885,
+    highlights: [
+      "Old Faithful eruption 🌋",
+      "Grand Prismatic Spring area",
+      "Day visit on the drive back to SLC",
+    ],
+    emoji: "🌋",
+    nights: 0,
+  },
+  {
+    id: 6,
+    phase: "Phase 2 — Utah",
     name: "Zion National Park",
     subtitle: "Utah · Sleep in St. George",
     dates: "May 22–23",
-    status: "upcoming",
+    status: "current",
     lat: 37.2982,
     lng: -113.0263,
     highlights: [
@@ -221,15 +238,15 @@ const STOPS = [
 // Update these as you go!
 // ─────────────────────────────────────────────
 const STATS = {
-  milesDriven: 660,        // Boulder → Arches (~420 mi) + Arches → SLC (~240 mi)
-  totalMiles: 3600,        // estimated total trip miles (updated for new Arches-first route)
-  stopsCompleted: 2,       // Boulder (departed) + Arches (done)
-  totalStops: 11,
-  statesVisited: ["CO", "UT"],
-  daysOnRoad: 2,
+  milesDriven: 1390,       // Boulder→Arches(420)+Arches→SLC(240)+SLC→Teton(280)+Teton→Yellowstone(60)+Yellowstone→SLC(325)+SLC→Zion(310 in progress, partial)
+  totalMiles: 3700,        // updated for Yellowstone detour added to route
+  stopsCompleted: 5,       // Boulder, Arches, SLC, Grand Teton, Yellowstone
+  totalStops: 12,          // added Yellowstone
+  statesVisited: ["CO", "UT", "WY"],
+  daysOnRoad: 5,
   tripStartDate: "2026-05-18",
-  hikesMiles: 6,           // Arches: Delicate Arch (3 mi) + Windows/Park Ave (~3 mi)
-  nightsCamped: 1,         // One night in Moab at Arches
+  hikesMiles: 15,          // Arches (~6 mi) + Jenny Lake area (~7 mi) + Old Faithful area (~2 mi)
+  nightsCamped: 2,         // Moab (Arches) + Jenny Lake Campground
 };
 
 // ─────────────────────────────────────────────
@@ -378,7 +395,7 @@ const DAYS = [
     drive: "~4.5–5 hrs",
     sleep: "Jenny Lake Campground",
     phase: "Phase 2 — Utah",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🏕️ Stay", items: [
         "Jenny Lake Campground — first-come, right on the lake (arrive before noon to grab a site)",
@@ -405,28 +422,29 @@ const DAYS = [
   // ── DAY 4 ─────────────────────────────────────────────
   {
     date: "Thu, May 21",
-    route: "Grand Teton → Salt Lake City",
-    drive: "~4.5–5 hrs",
+    route: "Grand Teton → Yellowstone → Salt Lake City",
+    drive: "~6–7 hrs",
     sleep: "Salt Lake City — Family Friends",
     phase: "Phase 2 — Utah",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🌅 Morning at the Tetons", items: [
-        "Sunrise at Schwabacher Landing (~5:30 AM) — Teton reflections on the Snake River",
+        "Sunrise at Schwabacher Landing — Teton reflections on the Snake River",
         "Mormon Row — Moulton Barn with the full range behind it",
-        "Snake River Overlook — Ansel Adams' famous shot",
-        "Coffee in Jackson before heading out",
+        "Snake River Overlook",
       ]},
-      { section: "🚗 Drive Back to SLC", items: [
-        "Jackson → US-89 S through Star Valley → SLC (~4.5 hrs)",
-        "Check in with family friends",
+      { section: "🌋 Yellowstone Detour", items: [
+        "North through Grand Teton → Yellowstone South Entrance",
+        "Old Faithful eruption — watched it go off! 🌋",
+        "Grand Prismatic Spring overlook",
+        "Yellowstone Lake viewpoint on the way through",
       ]},
-      { section: "🏠 SLC — Family Friends", items: [
-        "Home-cooked meal if they're cooking 🙏",
-        "Rest up — big Zion drive tomorrow",
+      { section: "🚗 Drive to SLC", items: [
+        "Yellowstone West Entrance → Idaho Falls → SLC (~4.5 hrs)",
+        "Arrived at family friends — home-cooked dinner 🙏",
       ]},
     ],
-    note: "Savor the morning light before leaving — the Tetons are unreal at sunrise.",
+    note: "Best unplanned detour of the trip.",
   },
 
   // ── DAY 5 ─────────────────────────────────────────────
@@ -436,7 +454,7 @@ const DAYS = [
     drive: "~4.5–5 hrs",
     sleep: "St. George, UT",
     phase: "Phase 2 — Utah",
-    status: "upcoming",
+    status: "today",
     plan: [
       { section: "🏨 Stay", items: [
         "St. George motel or Airbnb — ~30 min from Zion's east entrance",
@@ -791,7 +809,7 @@ const GALLERY = [
 // ─────────────────────────────────────────────
 const TRIP_META = {
   title: "Peak to Pacific",
-  tagline: "Boulder → Arches → Tetons → Zion → Yosemite → LA → Home",
+  tagline: "Boulder → Arches → Tetons → Yellowstone → Zion → Yosemite → LA → Home",
   travelers: ["Chandler", "Teigan"],
   startLocation: "Boulder, CO",
   endLocation: "Boulder, CO (round trip)",
