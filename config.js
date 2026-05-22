@@ -795,13 +795,28 @@ const DAYS = [
 ];
 
 // ─────────────────────────────────────────────
-// 📸 GALLERY (fallback if Cloudinary not set up)
-// If you prefer to upload manually, drop files in /photos/
-// and add entries here. Cloudinary takes priority when configured.
+// 📸 GALLERY
+//
+// HOW TO ADD PHOTOS:
+//   1. Name your photos 1.JPG, 2.JPG, 3.JPG … (or .jpg lowercase, both work)
+//   2. Drop them into the images/gallery/ folder
+//   3. git add images/gallery/ && git push
+//   That's it — they appear on the site automatically!
+//
+// OPTIONAL: Add captions and location labels below.
+//   Match the `n` number to the filename (n:1 → 1.JPG).
+//   Leave this array empty and photos still show — just unlabeled.
+//
+// GALLERY_COUNT: how many numbered files to check for.
+//   Set it to the highest number you'll ever use (50 is fine to start).
 // ─────────────────────────────────────────────
+const GALLERY_COUNT = 50;
+
 const GALLERY = [
-  // { file: "grand-teton-delta-lake.jpg", caption: "Delta Lake at sunrise", location: "Grand Teton NP" },
-  // { file: "yellowstone-prismatic.jpg", caption: "Grand Prismatic Spring", location: "Yellowstone" },
+  // { n: 1,  caption: "Delicate Arch at sunrise",       location: "Arches NP" },
+  // { n: 2,  caption: "Balanced Rock golden hour",      location: "Arches NP" },
+  // { n: 3,  caption: "Old Faithful blowing!",          location: "Yellowstone" },
+  // { n: 4,  caption: "Jenny Lake morning reflections", location: "Grand Teton NP" },
 ];
 
 // ─────────────────────────────────────────────
