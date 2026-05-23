@@ -19,10 +19,10 @@
 // Update this every time you move to a new spot.
 // ─────────────────────────────────────────────
 const CURRENT_LOCATION = {
-  lat: 37.2982,
-  lng: -113.0263,
-  label: "En route to Zion NP",
-  note: "Day 5 — driving from SLC to Zion 🚗",
+  lat: 37.8651,
+  lng: -119.5383,
+  label: "Yosemite National Park, CA",
+  note: "Day 6 — made it! Staying in Yosemite Valley 🏕️",
 };
 
 // ─────────────────────────────────────────────
@@ -122,7 +122,7 @@ const STOPS = [
     name: "Zion National Park",
     subtitle: "Utah · Sleep in St. George",
     dates: "May 22–23",
-    status: "current",
+    status: "completed",
     lat: 37.2982,
     lng: -113.0263,
     highlights: [
@@ -140,9 +140,9 @@ const STOPS = [
     id: 6,
     phase: "Phase 3 — California",
     name: "Yosemite National Park",
-    subtitle: "California · Arrive May 23",
+    subtitle: "California · You are here 🏕️",
     dates: "May 23–26",
-    status: "upcoming",
+    status: "current",
     lat: 37.8651,
     lng: -119.5383,
     highlights: [
@@ -238,15 +238,15 @@ const STOPS = [
 // Update these as you go!
 // ─────────────────────────────────────────────
 const STATS = {
-  milesDriven: 1390,       // Boulder→Arches(420)+Arches→SLC(240)+SLC→Teton(280)+Teton→Yellowstone(60)+Yellowstone→SLC(325)+SLC→Zion(310 in progress, partial)
-  totalMiles: 3700,        // updated for Yellowstone detour added to route
-  stopsCompleted: 5,       // Boulder, Arches, SLC, Grand Teton, Yellowstone
-  totalStops: 12,          // added Yellowstone
-  statesVisited: ["CO", "UT", "WY"],
-  daysOnRoad: 5,
+  milesDriven: 2075,       // +Zion(310)+St.George→Vegas→Yosemite(440)
+  totalMiles: 3700,
+  stopsCompleted: 6,       // Boulder, Arches, SLC, Grand Teton, Yellowstone, Zion
+  totalStops: 12,
+  statesVisited: ["CO", "UT", "WY", "NV", "CA"],
+  daysOnRoad: 6,
   tripStartDate: "2026-05-18",
-  hikesMiles: 15,          // Arches (~6 mi) + Jenny Lake area (~7 mi) + Old Faithful area (~2 mi)
-  nightsCamped: 2,         // Moab (Arches) + Jenny Lake Campground
+  hikesMiles: 21,          // +Zion (~6 mi — Watchman + canyon walks)
+  nightsCamped: 3,         // Moab + Jenny Lake + Zion/St. George
 };
 
 // ─────────────────────────────────────────────
@@ -454,7 +454,7 @@ const DAYS = [
     drive: "~4.5–5 hrs",
     sleep: "St. George, UT",
     phase: "Phase 2 — Utah",
-    status: "today",
+    status: "past",
     plan: [
       { section: "🏨 Stay", items: [
         "St. George motel or Airbnb — ~30 min from Zion's east entrance",
@@ -487,7 +487,7 @@ const DAYS = [
     drive: "~8–9 hrs",
     sleep: "Yosemite Valley / El Portal / Mariposa",
     phase: "Phase 3 — California",
-    status: "upcoming",
+    status: "today",
     plan: [
       { section: "🏕️ Stay", items: [
         "Upper Pines Campground (Yosemite Valley) — book at recreation.gov",
