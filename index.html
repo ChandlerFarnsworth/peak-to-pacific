@@ -250,6 +250,133 @@
     .popup-status.completed { background: rgba(34,197,94,0.15);  color: #16a34a; }
     .popup-status.current   { background: rgba(61,154,200,0.15); color: var(--gold); }
     .popup-status.upcoming  { background: rgba(138,150,168,0.15); color: var(--text-muted); }
+
+    /* ── Album section ─────────────────────────────────────── */
+    .album-section {
+      border-top: 1px solid var(--border);
+      padding: 52px 0 68px;
+      background: var(--bg);
+    }
+
+    .album-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .album-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .album-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      line-height: 1.1;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .album-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .album-cta:hover { background: var(--gold-dim, #2d7aaa); transform: translateY(-1px); }
+
+    /* ── Stop photo grid ─────────────────────────────────────── */
+    .stops-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 900px) { .stops-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 560px) { .stops-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .stop-photo-card {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      border: 1px solid var(--border);
+      display: block;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+      background: var(--bg-card);
+    }
+
+    .stop-photo-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-light);
+      box-shadow: var(--shadow);
+    }
+
+    .stop-photo-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .3s;
+    }
+
+    .stop-photo-card:hover img { transform: scale(1.05); }
+
+    .stop-photo-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
+      font-size: 2.2rem;
+    }
+
+    .stop-photo-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 32px 12px 10px;
+      background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 100%);
+    }
+
+    .stop-photo-name {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #fff;
+      line-height: 1.25;
+    }
+
+    .stop-photo-date {
+      font-size: 0.6rem;
+      color: var(--gold);
+      margin-top: 2px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
   </style>
 </head>
 <body>
@@ -276,12 +403,12 @@
 <div class="page-hero hero-short" style="background-image: url('images/heroes/map.jpg')">
   <div class="hero-inner">
     <div class="hero-content">
-      <div class="hero-eyebrow">Live Location</div>
-      <h1 class="hero-title">Follow Our Journey</h1>
-      <p class="hero-subtitle">11 stops · 5 states · ~3,400 miles — Rockies to Pacific and back</p>
+      <div class="hero-eyebrow">Trip Complete 🎉</div>
+      <h1 class="hero-title">Peak to Pacific</h1>
+      <p class="hero-subtitle">12 stops · 5 states · ~3,500 miles — May 18 to June 1, 2026</p>
       <div class="hero-badges">
-        <span class="hero-badge hero-badge-live"><span class="dot-live"></span> Tracking Active</span>
-        <span class="hero-badge hero-badge-date">May 12, 2026</span>
+        <span class="hero-badge hero-badge-live">✅ Made It Home</span>
+        <span class="hero-badge hero-badge-date">May 18 – June 1, 2026</span>
       </div>
     </div>
   </div>
@@ -338,6 +465,25 @@
   </div>
 </main>
 
+<!-- ── Album Section ──────────────────────────────────────── -->
+<section class="album-section">
+  <div class="container">
+    <div class="album-header">
+      <div>
+        <p class="album-eyebrow">Along the Way</p>
+        <h2 class="album-title">Photos from the Road</h2>
+      </div>
+      <a id="albumLink" href="#" target="_blank" rel="noopener" class="album-cta" style="display:none">
+        📸 View Full Album
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+    <div class="stops-grid" id="stopsGrid"></div>
+  </div>
+</section>
+
 <footer class="footer">
   <svg class="footer-mountain" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true">
     <path d="M0,40 L0,28 L80,18 L160,28 L240,12 L320,24 L400,8 L480,20 L560,6 L640,18 L720,4 L800,16 L880,6 L960,20 L1040,10 L1120,22 L1200,12 L1280,24 L1360,14 L1440,24 L1440,40 Z" fill="var(--sage)"/>
@@ -355,6 +501,25 @@
 
   document.getElementById('locationLabel').textContent = CURRENT_LOCATION.label;
   document.getElementById('locationNote').textContent  = CURRENT_LOCATION.note || '';
+
+  // ── Album link ──────────────────────────────────────────────
+  var gpUrl = typeof GOOGLE_PHOTOS_URL !== 'undefined' ? GOOGLE_PHOTOS_URL.trim() : '';
+  var albumLink = document.getElementById('albumLink');
+  if (gpUrl) { albumLink.href = gpUrl; albumLink.style.display = ''; }
+
+  // ── Stop photo grid ─────────────────────────────────────────
+  document.getElementById('stopsGrid').innerHTML = STOPS.map(function(stop) {
+    return '<a class="stop-photo-card" href="gallery.html" title="' + stop.name + '">'
+      + '<img src="images/stops/' + stop.id + '.jpg" alt="' + stop.name + '"'
+      + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"'
+      + ' style="display:block"/>'
+      + '<div class="stop-photo-placeholder" style="display:none">' + stop.emoji + '</div>'
+      + '<div class="stop-photo-overlay">'
+      + '<div class="stop-photo-name">' + stop.name + '</div>'
+      + '<div class="stop-photo-date">' + stop.dates + '</div>'
+      + '</div>'
+      + '</a>';
+  }).join('');
 
   const completedCount = STOPS.filter(s => s.status === 'completed').length;
   const pct = Math.round((completedCount / STOPS.length) * 100);

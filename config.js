@@ -19,10 +19,10 @@
 // Update this every time you move to a new spot.
 // ─────────────────────────────────────────────
 const CURRENT_LOCATION = {
-  lat: 37.8651,
-  lng: -119.5383,
-  label: "Yosemite National Park, CA",
-  note: "Day 6 — made it! Staying in Yosemite Valley 🏕️",
+  lat: 40.0150,
+  lng: -105.2705,
+  label: "Boulder, CO — Home! 🏠",
+  note: "Trip complete — 15 days, ~3,500 miles, 5 states 🎉",
 };
 
 // ─────────────────────────────────────────────
@@ -140,9 +140,9 @@ const STOPS = [
     id: 6,
     phase: "Phase 3 — California",
     name: "Yosemite National Park",
-    subtitle: "California · You are here 🏕️",
+    subtitle: "California",
     dates: "May 23–26",
-    status: "current",
+    status: "completed",
     lat: 37.8651,
     lng: -119.5383,
     highlights: [
@@ -160,7 +160,7 @@ const STOPS = [
     name: "San Francisco, CA",
     subtitle: "California · Quick Stop",
     dates: "May 27",
-    status: "upcoming",
+    status: "completed",
     lat: 37.8199,
     lng: -122.4783,
     highlights: [
@@ -176,7 +176,7 @@ const STOPS = [
     name: "Monterey & Carmel, CA",
     subtitle: "California · Quick Stop",
     dates: "May 27",
-    status: "upcoming",
+    status: "completed",
     lat: 36.6002,
     lng: -121.8947,
     highlights: [
@@ -192,7 +192,7 @@ const STOPS = [
     name: "San Luis Obispo, CA",
     subtitle: "California · Overnight Stop",
     dates: "May 27",
-    status: "upcoming",
+    status: "completed",
     lat: 35.2828,
     lng: -120.6596,
     highlights: ["Pismo Beach overnight", "Halfway between Monterey and LA"],
@@ -205,7 +205,7 @@ const STOPS = [
     name: "Los Angeles, CA",
     subtitle: "California",
     dates: "May 28–30",
-    status: "upcoming",
+    status: "completed",
     lat: 34.0522,
     lng: -118.2437,
     highlights: [
@@ -224,7 +224,7 @@ const STOPS = [
     name: "Boulder, CO",
     subtitle: "Back home! 🎉",
     dates: "June 1",
-    status: "upcoming",
+    status: "completed",
     lat: 40.0150,
     lng: -105.2705,
     highlights: ["Road trip complete!", "Arches first, California coast, Tetons — what a run"],
@@ -238,15 +238,15 @@ const STOPS = [
 // Update these as you go!
 // ─────────────────────────────────────────────
 const STATS = {
-  milesDriven: 2075,       // +Zion(310)+St.George→Vegas→Yosemite(440)
-  totalMiles: 3700,
-  stopsCompleted: 6,       // Boulder, Arches, SLC, Grand Teton, Yellowstone, Zion
+  milesDriven: 3500,
+  totalMiles: 3500,
+  stopsCompleted: 12,
   totalStops: 12,
   statesVisited: ["CO", "UT", "WY", "NV", "CA"],
-  daysOnRoad: 6,
+  daysOnRoad: 15,
   tripStartDate: "2026-05-18",
-  hikesMiles: 21,          // +Zion (~6 mi — Watchman + canyon walks)
-  nightsCamped: 3,         // Moab + Jenny Lake + Zion/St. George
+  hikesMiles: 42,
+  nightsCamped: 7,
 };
 
 // ─────────────────────────────────────────────
@@ -365,7 +365,7 @@ const DAYS = [
     drive: "~3.5–4 hrs",
     sleep: "Salt Lake City — Airbnb",
     phase: "Phase 1 — Rockies & Desert",
-    status: "today",
+    status: "past",
     plan: [
       { section: "🌅 Morning at Arches", items: [
         "Delicate Arch hike (3 mi RT, 480 ft gain) — best in morning light",
@@ -487,7 +487,7 @@ const DAYS = [
     drive: "~8–9 hrs",
     sleep: "Yosemite Valley / El Portal / Mariposa",
     phase: "Phase 3 — California",
-    status: "today",
+    status: "past",
     plan: [
       { section: "🏕️ Stay", items: [
         "Upper Pines Campground (Yosemite Valley) — book at recreation.gov",
@@ -523,7 +523,7 @@ const DAYS = [
     drive: "~2.5–4.5 hrs",
     sleep: "Yosemite Valley / El Portal / Mariposa",
     phase: "Phase 3 — California",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🏕️ Stay", items: [
         "Upper Pines Campground — best location in Yosemite Valley, reservations required at recreation.gov",
@@ -556,7 +556,7 @@ const DAYS = [
     drive: null,
     sleep: "Yosemite Valley / El Portal / Mariposa",
     phase: "Phase 3 — California",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🌅 Morning", items: [
         "Mirror Lake loop (5 mi, easy) — start at 7 AM for the best Half Dome reflections",
@@ -586,7 +586,7 @@ const DAYS = [
     drive: null,
     sleep: "Yosemite Valley / El Portal / Mariposa",
     phase: "Phase 3 — California",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🥾 Option A — Half Dome (permit required)", items: [
         "Start by 4 AM — 16 mi RT, 4,800 ft gain, cables section near the top",
@@ -618,7 +618,7 @@ const DAYS = [
     drive: "~7–9 hrs total",
     sleep: "San Luis Obispo / Pismo Beach",
     phase: "Phase 3 — California",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🏨 Stay", items: [
         "SLO: HI Hostel Obispo (cheap, social, great location), or Airbnb near downtown",
@@ -655,7 +655,7 @@ const DAYS = [
     drive: "~3.5–4.5 hrs from SLO",
     sleep: "LA / Burbank",
     phase: "Phase 3 — California",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🏨 Stay", items: [
         "Burbank: Hotel Amarano, Safari Inn, or family/friend's place",
@@ -682,7 +682,7 @@ const DAYS = [
     drive: null,
     sleep: "LA / Burbank",
     phase: "Phase 3 — California",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🔭 Morning", items: [
         "Griffith Observatory — free entry, best views of the Hollywood Sign and downtown skyline",
@@ -710,7 +710,7 @@ const DAYS = [
     drive: null,
     sleep: "LA / Burbank",
     phase: "Phase 3 — California",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🌿 Activities (pick 1–2)", items: [
         "Getty Center — free admission, incredible views + world-class art (reserve timed entry)",
@@ -741,7 +741,7 @@ const DAYS = [
     drive: "~4 hrs",
     sleep: "Las Vegas, NV",
     phase: "Phase 4 — Home",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🏨 Stay", items: [
         "Las Vegas hotel — great deals on Sunday nights (off-peak)",
@@ -773,7 +773,7 @@ const DAYS = [
     drive: "~9–9.5 hrs",
     sleep: "Boulder — Home!",
     phase: "Phase 4 — Home",
-    status: "upcoming",
+    status: "past",
     plan: [
       { section: "🌅 Morning", items: [
         "Early start from Vegas — leave by 7–8 AM",
