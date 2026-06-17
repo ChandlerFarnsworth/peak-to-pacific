@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Peak to Pacific — Map</title>
-  <meta name="description" content="Follow Chandler & Teigan's post-graduation road trip from Boulder to the Pacific and back." />
+  <title>Peak to Pacific</title>
+  <meta name="description" content="Chandler & Teigan's post-graduation road trip — Boulder to the Pacific and back. 15 days, ~3,500 miles, 5 states." />
 
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
@@ -17,103 +17,232 @@
   <link rel="stylesheet" href="style.css" />
 
   <style>
+
+    /* ── Page-level overrides ──────────────────────────────── */
+    body { background: var(--bg); }
+
+    /* ── Minimal nav — brand only ─────────────────────────── */
+    .nav-links, .nav-mobile-btn { display: none !important; }
+    .nav { justify-content: center; }
+    .nav-brand {
+      font-size: 1.15rem;
+      letter-spacing: 0.18em;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       HERO
+       ══════════════════════════════════════════════════════ */
+    .trip-hero {
+      position: relative;
+      background: var(--dark);
+      padding: 100px 24px 80px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .trip-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('images/heroes/map.jpg') center / cover no-repeat;
+      opacity: 0.22;
+    }
+
+    .trip-hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .trip-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+
+    .trip-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+
+    .trip-tagline {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.05em;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .trip-badges {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .trip-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 999px;
+    }
+
+    .badge-done {
+      background: rgba(34,197,94,0.15);
+      border: 1px solid rgba(34,197,94,0.3);
+      color: #22c55e;
+    }
+
+    .badge-dates {
+      background: rgba(61,154,200,0.1);
+      border: 1px solid rgba(61,154,200,0.2);
+      color: var(--gold);
+    }
+
+    .badge-names {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* ── Hero → Stats divider ─────────────────────────────── */
+    .hero-mountain {
+      display: block;
+      width: 100%;
+      margin-top: -2px;
+    }
+
+    /* ══════════════════════════════════════════════════════
+       STATS STRIP
+       ══════════════════════════════════════════════════════ */
+    .stats-section {
+      background: var(--dark);
+      padding-bottom: 56px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.07);
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    @media (max-width: 860px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .stat-cell {
+      background: var(--dark);
+      padding: 28px 20px 24px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .stat-num .stat-tilde {
+      font-size: 0.65em;
+      color: var(--gold);
+      vertical-align: top;
+      margin-top: 4px;
+      display: inline-block;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-top: 6px;
+    }
+
+    .stat-icon {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      opacity: 0.85;
+    }
+
+    /* ── States row ───────────────────────────────────────── */
+    .states-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+      padding: 0 24px;
+    }
+
+    .state-chip {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 5px 14px;
+      border-radius: 999px;
+      background: rgba(61,154,200,0.1);
+      border: 1px solid rgba(61,154,200,0.2);
+      color: var(--gold);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       ROUTE SECTION
+       ══════════════════════════════════════════════════════ */
+    .route-section {
+      background: var(--bg);
+      padding: 52px 0 56px;
+    }
+
+    .section-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+    }
+
     #map {
-      height: calc(100vh - var(--nav-height) - 260px);
-      min-height: 380px;
-      border-radius: 4px;
+      height: 420px;
+      min-height: 300px;
+      border-radius: 6px;
       overflow: hidden;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-lg);
     }
 
-    /* ── Location banner ───────────────────────────────── */
-    .location-banner {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 18px 22px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .location-pin {
-      width: 44px; height: 44px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; flex-shrink: 0;
-      box-shadow: 0 0 0 4px var(--gold-glow);
-    }
-
-    .location-info { flex: 1; min-width: 160px; }
-
-    .location-label {
-      font-family: var(--font-display);
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      line-height: 1.15;
-    }
-
-    .location-note {
-      color: var(--text-secondary);
-      font-size: 0.83rem;
-      margin-top: 2px;
-    }
-
-    .live-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(74,222,128,0.1);
-      border: 1px solid rgba(74,222,128,0.22);
-      border-radius: 999px;
-      padding: 5px 13px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--green-bright);
-      margin-left: auto;
-      flex-shrink: 0;
-    }
-
-    /* ── Map ───────────────────────────────────────────── */
+    /* Map controls */
     .map-wrapper { position: relative; }
-
-    .map-controls {
-      position: absolute;
-      bottom: 18px; left: 18px;
-      z-index: 10;
-      display: flex;
-      gap: 8px;
-    }
-
-    .map-ctrl-btn {
-      background: rgba(13, 18, 25, 0.88);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 4px;
-      padding: 7px 13px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      cursor: pointer;
-      letter-spacing: 0.04em;
-      font-family: var(--font-body);
-      transition: all .2s;
-    }
-
-    .map-ctrl-btn:hover {
-      background: rgba(13, 18, 25, 0.98);
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
     .style-toggle {
       position: absolute;
       top: 12px; left: 12px;
@@ -121,7 +250,6 @@
       display: flex;
       gap: 6px;
     }
-
     .style-btn {
       background: rgba(13, 18, 25, 0.85);
       backdrop-filter: blur(6px);
@@ -130,183 +258,80 @@
       padding: 5px 12px;
       font-size: 0.66rem;
       font-weight: 600;
-      color: var(--text-muted);
+      color: rgba(255,255,255,0.55);
       cursor: pointer;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       font-family: var(--font-body);
       transition: all .2s;
     }
-
-    .style-btn.active,
-    .style-btn:hover {
+    .style-btn.active, .style-btn:hover {
       border-color: var(--gold);
       color: var(--gold);
       background: rgba(13, 18, 25, 0.98);
     }
-
-    /* ── Car Marker ────────────────────────────────────── */
-    .car-marker {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      background: var(--dark);
-      border: 2px solid var(--gold);
-      border-radius: 50%;
-      box-shadow: 0 0 0 0 rgba(61,154,200,0.5);
-      animation: car-pulse 2.2s ease-out infinite;
+    .map-ctrl-btn {
+      background: rgba(13, 18, 25, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 4px;
+      padding: 7px 13px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
       cursor: pointer;
-      line-height: 1;
+      letter-spacing: 0.04em;
+      font-family: var(--font-body);
+      transition: all .2s;
     }
-
-    @keyframes car-pulse {
-      0%   { box-shadow: 0 0 0 0   rgba(61,154,200,0.55); }
-      60%  { box-shadow: 0 0 0 10px rgba(61,154,200,0.0); }
-      100% { box-shadow: 0 0 0 0   rgba(61,154,200,0.0); }
+    .map-ctrl-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .map-controls {
+      position: absolute;
+      bottom: 14px; left: 14px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
     }
-
-    /* ── Legend ────────────────────────────────────────── */
     .route-legend {
       display: flex;
       gap: 18px;
       flex-wrap: wrap;
       margin-top: 14px;
-      padding: 0 4px;
+      padding: 0 2px;
     }
-
     .legend-item {
       display: flex;
       align-items: center;
       gap: 7px;
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       color: var(--text-secondary);
     }
-
     .legend-dot {
       width: 9px; height: 9px;
       border-radius: 50%;
       flex-shrink: 0;
     }
 
-    /* ── Progress strip ────────────────────────────────── */
-    .progress-section {
-      margin-top: 18px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 18px 22px;
-    }
-
-    .progress-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 10px;
-    }
-
-    .progress-meta .label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-    }
-
-    .progress-meta .value {
-      font-family: var(--font-display);
-      font-size: 0.95rem;
-      color: var(--gold);
-    }
-
-    /* ── Popup ─────────────────────────────────────────── */
+    /* Popup */
     .popup-emoji { font-size: 1.3rem; margin-bottom: 5px; }
-    .popup-name {
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      color: var(--text-primary);
-      margin-bottom: 2px;
-    }
+    .popup-name { font-family: var(--font-display); font-size: 1rem; font-weight: 600; letter-spacing: 0.03em; color: var(--text-primary); margin-bottom: 2px; }
     .popup-sub  { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 8px; }
     .popup-highlight { font-size: 0.68rem; color: var(--text-secondary); margin-top: 2px; }
     .popup-highlight::before { content: '· '; }
-    .popup-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 1px solid var(--border);
-    }
+    .popup-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
     .popup-dates { font-size: 0.65rem; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: .07em; }
-    .popup-status {
-      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .08em; padding: 2px 8px; border-radius: 4px;
-    }
-    .popup-status.completed { background: rgba(34,197,94,0.15);  color: #16a34a; }
-    .popup-status.current   { background: rgba(61,154,200,0.15); color: var(--gold); }
-    .popup-status.upcoming  { background: rgba(138,150,168,0.15); color: var(--text-muted); }
+    .popup-status { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 2px 8px; border-radius: 4px; }
+    .popup-status.completed { background: rgba(34,197,94,0.15); color: #16a34a; }
 
-    /* ── Album section ─────────────────────────────────────── */
-    .album-section {
+    /* ══════════════════════════════════════════════════════
+       PHOTOS SECTION
+       ══════════════════════════════════════════════════════ */
+    .photos-section {
+      background: var(--bg-elevated);
+      padding: 52px 0 60px;
       border-top: 1px solid var(--border);
-      padding: 52px 0 68px;
-      background: var(--bg);
     }
 
-    .album-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 28px;
-    }
-
-    .album-eyebrow {
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--gold);
-      margin-bottom: 6px;
-    }
-
-    .album-title {
-      font-family: var(--font-display);
-      font-size: 1.75rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      line-height: 1.1;
-      color: var(--text-primary);
-      margin: 0;
-    }
-
-    .album-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--gold);
-      color: #fff;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      text-decoration: none;
-      padding: 12px 24px;
-      border-radius: 4px;
-      transition: background .2s, transform .15s;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .album-cta:hover { background: var(--gold-dim, #2d7aaa); transform: translateY(-1px); }
-
-    /* ── Stop photo grid ─────────────────────────────────────── */
     .stops-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -318,20 +343,19 @@
 
     .stop-photo-card {
       position: relative;
-      border-radius: 4px;
+      border-radius: 5px;
       overflow: hidden;
       aspect-ratio: 4 / 3;
       border: 1px solid var(--border);
       display: block;
       text-decoration: none;
-      cursor: pointer;
-      transition: transform .2s, border-color .2s, box-shadow .2s;
+      cursor: default;
+      transition: transform .2s, box-shadow .2s;
       background: var(--bg-card);
     }
 
     .stop-photo-card:hover {
       transform: translateY(-3px);
-      border-color: var(--border-light);
       box-shadow: var(--shadow);
     }
 
@@ -341,8 +365,7 @@
       display: block;
       transition: transform .3s;
     }
-
-    .stop-photo-card:hover img { transform: scale(1.05); }
+    .stop-photo-card:hover img { transform: scale(1.04); }
 
     .stop-photo-placeholder {
       width: 100%; height: 100%;
@@ -350,14 +373,14 @@
       align-items: center;
       justify-content: center;
       background: linear-gradient(145deg, var(--bg-elevated) 0%, var(--bg-card) 100%);
-      font-size: 2.2rem;
+      font-size: 2.4rem;
     }
 
     .stop-photo-overlay {
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      padding: 32px 12px 10px;
-      background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 100%);
+      padding: 36px 12px 10px;
+      background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, transparent 100%);
     }
 
     .stop-photo-name {
@@ -377,60 +400,136 @@
       letter-spacing: 0.07em;
       text-transform: uppercase;
     }
+
+    /* ══════════════════════════════════════════════════════
+       ALBUM CTA
+       ══════════════════════════════════════════════════════ */
+    .album-section {
+      background: var(--dark);
+      padding: 72px 24px;
+      text-align: center;
+    }
+
+    .album-section-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .album-section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .album-section-sub {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 36px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .album-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gold);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 16px 36px;
+      border-radius: 4px;
+      transition: background .2s, transform .15s, box-shadow .2s;
+    }
+
+    .album-btn:hover {
+      background: var(--gold-dim);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(61,154,200,0.35);
+      color: #fff;
+    }
+
+    .album-btn svg { flex-shrink: 0; }
+
+    .album-note {
+      margin-top: 20px;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.06em;
+    }
+
   </style>
 </head>
 <body>
 
-<!-- ── Navigation ─────────────────────────────────────── -->
+<!-- ── Minimal nav — brand only ────────────────────────────── -->
 <nav class="nav" id="mainNav">
   <a href="index.html" class="nav-brand">
     Peak <span class="accent">&nbsp;/&nbsp;</span> Pacific
   </a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="index.html" class="active">Map</a></li>
-    <li><a href="agenda.html">Agenda</a></li>
-    <li><a href="stats.html">Stats</a></li>
-    <li><a href="gallery.html">Gallery</a></li>
-  </ul>
-  <button class="nav-mobile-btn" id="mobileBtn" aria-label="Menu">
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-  </button>
+  <ul class="nav-links" id="navLinks"></ul>
+  <button class="nav-mobile-btn" id="mobileBtn" aria-label="Menu" style="display:none"></button>
 </nav>
 
-<!-- ── Hero ───────────────────────────────────────────── -->
-<div class="page-hero hero-short" style="background-image: url('images/heroes/map.jpg')">
-  <div class="hero-inner">
-    <div class="hero-content">
-      <div class="hero-eyebrow">Trip Complete 🎉</div>
-      <h1 class="hero-title">Peak to Pacific</h1>
-      <p class="hero-subtitle">12 stops · 5 states · ~3,500 miles — May 18 to June 1, 2026</p>
-      <div class="hero-badges">
-        <span class="hero-badge hero-badge-live">✅ Made It Home</span>
-        <span class="hero-badge hero-badge-date">May 18 – June 1, 2026</span>
-      </div>
+<!-- ══════════════════════════════════════════════════════════
+     HERO
+     ══════════════════════════════════════════════════════════ -->
+<div class="trip-hero">
+  <div class="trip-hero-inner">
+    <div class="trip-eyebrow">✅ Trip Complete</div>
+    <h1 class="trip-title">Peak to Pacific</h1>
+    <p class="trip-tagline">
+      Boulder → Arches → Tetons → Yellowstone → Zion → Yosemite → LA → Home
+    </p>
+    <div class="trip-badges">
+      <span class="trip-badge badge-done">Made It Home 🏠</span>
+      <span class="trip-badge badge-dates">May 18 – June 1, 2026</span>
+      <span class="trip-badge badge-names">Chandler &amp; Teigan</span>
     </div>
   </div>
 </div>
 
-<!-- ── Mountain Divider ────────────────────────────────── -->
-<svg class="mountain-divider" viewBox="0 0 1440 72" preserveAspectRatio="none" aria-hidden="true">
-  <path d="M0,72 L0,52 L60,38 L120,50 L200,28 L280,44 L360,18 L440,36 L520,12 L600,30 L680,8 L760,26 L840,14 L920,34 L1000,20 L1080,42 L1160,24 L1240,46 L1320,30 L1380,48 L1440,36 L1440,72 Z" fill="#071209"/>
+<!-- ── divider ─────────────────────────────────────────────── -->
+<svg class="hero-mountain" viewBox="0 0 1440 44" preserveAspectRatio="none" aria-hidden="true" style="display:block;background:var(--dark)">
+  <path d="M0,44 L0,32 L60,20 L140,34 L220,14 L300,28 L400,8 L480,24 L560,6 L660,22 L740,4 L820,20 L920,10 L1000,28 L1080,14 L1160,30 L1260,12 L1360,26 L1440,16 L1440,44 Z" fill="var(--dark)"/>
 </svg>
 
-<!-- ── Map Content ────────────────────────────────────── -->
-<main class="page-content" style="padding-top: 8px;">
-  <div class="container" style="padding-bottom: 56px;">
+<!-- ══════════════════════════════════════════════════════════
+     STATS STRIP
+     ══════════════════════════════════════════════════════════ -->
+<section class="stats-section">
+  <div class="stats-grid" id="statsGrid">
+    <!-- filled by JS -->
+  </div>
+  <div class="states-row" id="statesRow">
+    <!-- filled by JS -->
+  </div>
+</section>
 
-    <div class="location-banner">
-      <div class="location-pin">📍</div>
-      <div class="location-info">
-        <div class="location-label" id="locationLabel">–</div>
-        <div class="location-note" id="locationNote"></div>
-      </div>
-      <div class="live-pill"><span class="dot-live"></span> Live</div>
-    </div>
+<!-- ── divider into light bg ──────────────────────────────── -->
+<svg viewBox="0 0 1440 36" preserveAspectRatio="none" aria-hidden="true" style="display:block;background:var(--bg);margin-top:-1px">
+  <path d="M0,0 L0,36 L1440,36 L1440,0 L1380,14 L1300,4 L1220,18 L1120,6 L1040,20 L960,8 L860,22 L780,10 L700,24 L600,8 L520,22 L420,6 L340,20 L240,8 L160,22 L80,10 L0,0 Z" fill="var(--dark)"/>
+</svg>
+
+<!-- ══════════════════════════════════════════════════════════
+     ROUTE MAP
+     ══════════════════════════════════════════════════════════ -->
+<section class="route-section">
+  <div class="container">
+    <p class="section-eyebrow">~3,500 miles · 5 states</p>
+    <h2 class="section-title">The Route</h2>
 
     <div class="map-wrapper">
       <div id="map"></div>
@@ -441,49 +540,46 @@
       </div>
       <div class="map-controls">
         <button class="map-ctrl-btn" onclick="fitRoute()">Full Route</button>
-        <button class="map-ctrl-btn" onclick="goToCurrent()">Current</button>
       </div>
     </div>
 
     <div class="route-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#4ade80"></div> Completed</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--gold);box-shadow:0 0 6px var(--gold)"></div> Current Stop</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--text-muted)"></div> Upcoming</div>
-      <div class="legend-item"><div style="width:22px;height:2px;background:rgba(255,255,255,0.75);border-radius:1px;border-top:1px dashed rgba(61,154,200,0.8)"></div> Route</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4ade80"></div> Completed stop</div>
+      <div class="legend-item"><div style="width:22px;height:2px;background:rgba(255,255,255,0.5);border-top:1px dashed rgba(61,154,200,0.7)"></div> Route</div>
     </div>
-
-    <div class="progress-section">
-      <div class="progress-meta">
-        <span class="label">Trip Progress</span>
-        <span class="value" id="progressLabel">–</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
-      </div>
-    </div>
-
-  </div>
-</main>
-
-<!-- ── Album Section ──────────────────────────────────────── -->
-<section class="album-section">
-  <div class="container">
-    <div class="album-header">
-      <div>
-        <p class="album-eyebrow">Along the Way</p>
-        <h2 class="album-title">Photos from the Road</h2>
-      </div>
-      <a id="albumLink" href="#" target="_blank" rel="noopener" class="album-cta" style="display:none">
-        📸 View Full Album
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-    </div>
-    <div class="stops-grid" id="stopsGrid"></div>
   </div>
 </section>
 
+<!-- ══════════════════════════════════════════════════════════
+     PHOTOS
+     ══════════════════════════════════════════════════════════ -->
+<section class="photos-section">
+  <div class="container">
+    <p class="section-eyebrow">12 stops · 5 states</p>
+    <h2 class="section-title">Along the Way</h2>
+    <div class="stops-grid" id="stopsGrid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     ALBUM CTA
+     ══════════════════════════════════════════════════════════ -->
+<section class="album-section" id="albumSection">
+  <p class="album-section-eyebrow">Every Shot</p>
+  <h2 class="album-section-title">View the Full Album</h2>
+  <p class="album-section-sub">All the photos from 15 days on the road — sunrises, summits, and everything between.</p>
+  <a id="albumBtn" href="#" target="_blank" rel="noopener" class="album-btn" style="display:none">
+    📸 Open Google Photos
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+  <p class="album-note" id="albumNote"></p>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────── -->
 <footer class="footer">
   <svg class="footer-mountain" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true">
     <path d="M0,40 L0,28 L80,18 L160,28 L240,12 L320,24 L400,8 L480,20 L560,6 L640,18 L720,4 L800,16 L880,6 L960,20 L1040,10 L1120,22 L1200,12 L1280,24 L1360,14 L1440,24 L1440,40 Z" fill="var(--sage)"/>
@@ -495,21 +591,50 @@
 <script src="config.js"></script>
 <script src="nav-scroll.js" defer></script>
 <script>
-  document.getElementById('mobileBtn').addEventListener('click', () => {
-    document.getElementById('navLinks').classList.toggle('open');
-  });
 
-  document.getElementById('locationLabel').textContent = CURRENT_LOCATION.label;
-  document.getElementById('locationNote').textContent  = CURRENT_LOCATION.note || '';
+  // ── Stats strip ──────────────────────────────────────────
+  var cells = [
+    { icon: '🛣️', num: '~' + (STATS.milesDriven || 3500).toLocaleString(), label: 'Miles Driven' },
+    { icon: '📅', num: STATS.daysOnRoad || 15, label: 'Days on the Road' },
+    { icon: '📍', num: STATS.stopsCompleted || 12, label: 'Stops Completed' },
+    { icon: '🗺️', num: (STATS.statesVisited || []).length || 5, label: 'States Visited' },
+    { icon: '🥾', num: (STATS.hikesMiles || 42) + ' mi', label: 'Miles Hiked' },
+    { icon: '⛺', num: STATS.nightsCamped || 7, label: 'Nights Camped' },
+  ];
 
-  // ── Album link ──────────────────────────────────────────────
+  document.getElementById('statsGrid').innerHTML = cells.map(function(c) {
+    var numStr = String(c.num);
+    var hasApprox = numStr.startsWith('~');
+    var display = hasApprox
+      ? '<span class="stat-tilde">~</span>' + numStr.slice(1)
+      : numStr;
+    return '<div class="stat-cell">'
+      + '<div class="stat-icon">' + c.icon + '</div>'
+      + '<div class="stat-num">' + display + '</div>'
+      + '<div class="stat-label">' + c.label + '</div>'
+      + '</div>';
+  }).join('');
+
+  // ── States ───────────────────────────────────────────────
+  var stateNames = { CO:'Colorado', UT:'Utah', WY:'Wyoming', NV:'Nevada', CA:'California' };
+  document.getElementById('statesRow').innerHTML = (STATS.statesVisited || []).map(function(s) {
+    return '<span class="state-chip">' + (stateNames[s] || s) + '</span>';
+  }).join('');
+
+  // ── Album link ───────────────────────────────────────────
   var gpUrl = typeof GOOGLE_PHOTOS_URL !== 'undefined' ? GOOGLE_PHOTOS_URL.trim() : '';
-  var albumLink = document.getElementById('albumLink');
-  if (gpUrl) { albumLink.href = gpUrl; albumLink.style.display = ''; }
+  if (gpUrl) {
+    var btn = document.getElementById('albumBtn');
+    btn.href = gpUrl;
+    btn.style.display = '';
+    document.getElementById('albumNote').textContent = '↗ opens in Google Photos';
+  } else {
+    document.getElementById('albumSection').style.display = 'none';
+  }
 
-  // ── Stop photo grid ─────────────────────────────────────────
+  // ── Stop photo grid ──────────────────────────────────────
   document.getElementById('stopsGrid').innerHTML = STOPS.map(function(stop) {
-    return '<a class="stop-photo-card" href="gallery.html" title="' + stop.name + '">'
+    return '<div class="stop-photo-card" title="' + stop.name + '">'
       + '<img src="images/stops/' + stop.id + '.jpg" alt="' + stop.name + '"'
       + ' onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"'
       + ' style="display:block"/>'
@@ -518,27 +643,21 @@
       + '<div class="stop-photo-name">' + stop.name + '</div>'
       + '<div class="stop-photo-date">' + stop.dates + '</div>'
       + '</div>'
-      + '</a>';
+      + '</div>';
   }).join('');
 
-  const completedCount = STOPS.filter(s => s.status === 'completed').length;
-  const pct = Math.round((completedCount / STOPS.length) * 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent =
-    `${completedCount} of ${STOPS.length} stops · ${pct}%`;
+  // ── Mapbox ───────────────────────────────────────────────
+  mapboxgl.accessToken = typeof MAPBOX_TOKEN !== 'undefined' ? MAPBOX_TOKEN : '';
 
-  mapboxgl.accessToken = typeof MAPBOX_TOKEN !== 'undefined' ? MAPBOX_TOKEN : 'YOUR_MAPBOX_TOKEN_HERE';
-
-  const STYLES = {
+  var STYLES = {
     outdoors:  'mapbox://styles/mapbox/outdoors-v12',
     satellite: 'mapbox://styles/mapbox/satellite-streets-v12',
     dark:      'mapbox://styles/mapbox/dark-v11',
   };
 
-  let currentStyle = 'outdoors';
-  let carMarker = null;
+  var currentStyle = 'outdoors';
 
-  const map = new mapboxgl.Map({
+  var map = new mapboxgl.Map({
     container: 'map',
     style: STYLES.outdoors,
     center: [-110, 42],
@@ -552,113 +671,87 @@
     if (currentStyle === name) return;
     currentStyle = name;
     map.setStyle(STYLES[name]);
-    document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.style-btn').forEach(function(b) { b.classList.remove('active'); });
     document.getElementById('btn' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
     map.once('styledata', addLayers);
   }
 
-  map.on('load', () => {
-    map.setFog({ color: 'rgb(13, 18, 25)', 'high-color': 'rgb(20, 32, 52)', 'horizon-blend': 0.04 });
+  map.on('load', function() {
+    map.setFog({ color: 'rgb(13,18,25)', 'high-color': 'rgb(20,32,52)', 'horizon-blend': 0.04 });
     addLayers();
   });
 
   function addLayers() {
-    ['route-line-glow','route-line','route-points','current-point'].forEach(id => {
+    ['route-line-glow','route-line','route-points'].forEach(function(id) {
       if (map.getLayer(id)) map.removeLayer(id);
       if (map.getSource(id)) map.removeSource(id);
     });
 
-    const coords = STOPS.map(s => [s.lng, s.lat]);
+    var coords = STOPS.map(function(s) { return [s.lng, s.lat]; });
 
     map.addSource('route-line', {
       type: 'geojson',
       data: { type:'Feature', geometry:{ type:'LineString', coordinates:coords } },
     });
 
-    // Glow layer — soft white halo underneath the dashed line
     map.addLayer({
-      id: 'route-line-glow', type: 'line', source: 'route-line',
-      layout: { 'line-join':'round', 'line-cap':'round' },
-      paint: { 'line-color':'#ffffff', 'line-width':5, 'line-opacity':0.12 },
+      id:'route-line-glow', type:'line', source:'route-line',
+      layout:{ 'line-join':'round','line-cap':'round' },
+      paint:{ 'line-color':'#ffffff','line-width':5,'line-opacity':0.1 },
     });
 
-    // Main dashed route line — white with blue tint, visible on all map styles
     map.addLayer({
-      id: 'route-line', type: 'line', source: 'route-line',
-      layout: { 'line-join':'round', 'line-cap':'round' },
-      paint: { 'line-color':'#a8d4ef', 'line-width':2, 'line-opacity':0.85, 'line-dasharray':[2,3] },
+      id:'route-line', type:'line', source:'route-line',
+      layout:{ 'line-join':'round','line-cap':'round' },
+      paint:{ 'line-color':'#a8d4ef','line-width':2,'line-opacity':0.85,'line-dasharray':[2,3] },
     });
 
-    const features = STOPS.map(s => ({
-      type: 'Feature',
-      properties: { id:s.id, name:s.name, subtitle:s.subtitle, status:s.status, emoji:s.emoji, dates:s.dates, highlights:(s.highlights||[]).slice(0,3).join('||') },
-      geometry: { type:'Point', coordinates:[s.lng,s.lat] },
-    }));
+    var features = STOPS.map(function(s) {
+      return {
+        type:'Feature',
+        properties:{ id:s.id, name:s.name, subtitle:s.subtitle, status:s.status, emoji:s.emoji, dates:s.dates, highlights:(s.highlights||[]).slice(0,3).join('||') },
+        geometry:{ type:'Point', coordinates:[s.lng,s.lat] },
+      };
+    });
 
-    map.addSource('route-points', { type:'geojson', data:{ type:'FeatureCollection', features } });
+    map.addSource('route-points', { type:'geojson', data:{ type:'FeatureCollection', features:features } });
 
     map.addLayer({
       id:'route-points', type:'circle', source:'route-points',
-      paint: {
-        'circle-radius': ['case',['==',['get','status'],'current'],11,['==',['get','status'],'completed'],7,5],
-        'circle-color':  ['case',['==',['get','status'],'current'],'#3d9ac8',['==',['get','status'],'completed'],'#22c55e','#8896a8'],
-        'circle-stroke-width': ['case',['==',['get','status'],'current'],3,2],
-        'circle-stroke-color': ['case',['==',['get','status'],'current'],'rgba(61,154,200,0.45)',['==',['get','status'],'completed'],'rgba(34,197,94,0.3)','rgba(138,150,168,0.3)'],
-        'circle-opacity': ['case',['==',['get','status'],'upcoming'],0.65,1],
+      paint:{
+        'circle-radius': 7,
+        'circle-color': '#22c55e',
+        'circle-stroke-width': 2,
+        'circle-stroke-color': 'rgba(34,197,94,0.3)',
       },
     });
 
-    const currentStop = STOPS.find(s => s.status === 'current');
-
-    // Car HTML marker — created once, persists across style changes
-    if (currentStop && !carMarker) {
-      const el = document.createElement('div');
-      el.className = 'car-marker';
-      el.textContent = '🚗';
-      el.title = currentStop.name;
-      carMarker = new mapboxgl.Marker({ element: el, anchor: 'center' })
-        .setLngLat([currentStop.lng, currentStop.lat])
-        .addTo(map);
-    }
-
-    map.on('click', 'route-points', (e) => {
-      const p = e.features[0].properties;
-      const highlights = (p.highlights||'').split('||').filter(Boolean);
+    map.on('click', 'route-points', function(e) {
+      var p = e.features[0].properties;
+      var highlights = (p.highlights||'').split('||').filter(Boolean);
       new mapboxgl.Popup({ closeButton:true, maxWidth:'260px' })
         .setLngLat(e.features[0].geometry.coordinates)
-        .setHTML(`
-          <div class="popup-emoji">${p.emoji}</div>
-          <div class="popup-name">${p.name}</div>
-          <div class="popup-sub">${p.subtitle}</div>
-          ${highlights.map(h=>`<div class="popup-highlight">${h}</div>`).join('')}
-          <div class="popup-footer">
-            <span class="popup-dates">${p.dates}</span>
-            <span class="popup-status ${p.status}">${p.status}</span>
-          </div>`)
+        .setHTML(
+          '<div class="popup-emoji">' + p.emoji + '</div>'
+          + '<div class="popup-name">' + p.name + '</div>'
+          + '<div class="popup-sub">' + p.subtitle + '</div>'
+          + highlights.map(function(h){ return '<div class="popup-highlight">' + h + '</div>'; }).join('')
+          + '<div class="popup-footer">'
+          + '<span class="popup-dates">' + p.dates + '</span>'
+          + '<span class="popup-status completed">✓ done</span>'
+          + '</div>'
+        )
         .addTo(map);
     });
 
-    map.on('mouseenter','route-points',()=>{ map.getCanvas().style.cursor='pointer'; });
-    map.on('mouseleave','route-points',()=>{ map.getCanvas().style.cursor=''; });
-
-    if (currentStop) {
-      setTimeout(()=>{
-        new mapboxgl.Popup({ closeButton:true, maxWidth:'260px' })
-          .setLngLat([currentStop.lng,currentStop.lat])
-          .setHTML(`<div class="popup-emoji">${currentStop.emoji}</div><div class="popup-name">${currentStop.name}</div><div class="popup-sub">${currentStop.subtitle}</div><div class="popup-footer"><span class="popup-dates">${currentStop.dates}</span><span class="popup-status current">current</span></div>`)
-          .addTo(map);
-      }, 800);
-    }
+    map.on('mouseenter','route-points', function(){ map.getCanvas().style.cursor='pointer'; });
+    map.on('mouseleave','route-points', function(){ map.getCanvas().style.cursor=''; });
   }
 
   function fitRoute() {
-    const coords = STOPS.map(s=>[s.lng,s.lat]);
-    const bounds = coords.reduce((b,c)=>b.extend(c), new mapboxgl.LngLatBounds(coords[0],coords[0]));
+    var coords = STOPS.map(function(s){ return [s.lng,s.lat]; });
+    var bounds = coords.reduce(function(b,c){ return b.extend(c); }, new mapboxgl.LngLatBounds(coords[0],coords[0]));
     map.fitBounds(bounds, { padding:60, duration:1000 });
-  }
-
-  function goToCurrent() {
-    map.flyTo({ center:[CURRENT_LOCATION.lng,CURRENT_LOCATION.lat], zoom:10, duration:1200 });
   }
 </script>
 </body>
