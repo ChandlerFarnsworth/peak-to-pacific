@@ -137,7 +137,7 @@ const STOPS = [
 
   // ── PHASE 3: CALIFORNIA ───────────────────────────────────
   {
-    id: 6,
+    id: 7,
     phase: "Phase 3 — California",
     name: "Yosemite National Park",
     subtitle: "California",
@@ -155,7 +155,7 @@ const STOPS = [
     nights: 3,
   },
   {
-    id: 7,
+    id: 8,
     phase: "Phase 3 — California",
     name: "San Francisco, CA",
     subtitle: "California · Quick Stop",
@@ -171,7 +171,7 @@ const STOPS = [
     nights: 0,
   },
   {
-    id: 8,
+    id: 9,
     phase: "Phase 3 — California",
     name: "Monterey & Carmel, CA",
     subtitle: "California · Quick Stop",
@@ -187,7 +187,7 @@ const STOPS = [
     nights: 0,
   },
   {
-    id: 9,
+    id: 10,
     phase: "Phase 3 — California",
     name: "San Luis Obispo, CA",
     subtitle: "California · Overnight Stop",
@@ -200,7 +200,7 @@ const STOPS = [
     nights: 1,
   },
   {
-    id: 10,
+    id: 11,
     phase: "Phase 3 — California",
     name: "Los Angeles, CA",
     subtitle: "California",
@@ -219,7 +219,7 @@ const STOPS = [
 
   // ── PHASE 4: HOME ─────────────────────────────────────────
   {
-    id: 11,
+    id: 12,
     phase: "Phase 4 — Home",
     name: "Boulder, CO",
     subtitle: "Back home! 🎉",
